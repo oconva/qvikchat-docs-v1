@@ -90,7 +90,7 @@ export interface ChatHistoryStore {
 You can provide an instance of a chat history store to the `defineChatEndpoint` function. The chat endpoint will use this store to manage chat histories.
 
 ```typescript copy
-import { InMemoryChatHistoryStore } from "qvikchat/history";
+import { InMemoryChatHistoryStore } from "@oconva/qvikchat/history";
 
 // Open-ended chat endpoint with support for chat history
 defineChatEndpoint({
@@ -105,8 +105,8 @@ defineChatEndpoint({
 You can use Firebase Firestore as a chat history store. Remember to initialize the Firebase app before using it. To learn more about initializing the Firebase app, check [Initialize Firebase App](/integrations/firebase#initialize-firebase-app)
 
 ```typescript copy
-import { getFirebaseApp } from "qvikchat/firebase";
-import { FirestoreChatHistoryStore } from "qvikchat/history";
+import { getFirebaseApp } from "@oconva/qvikchat/firebase";
+import { FirestoreChatHistoryStore } from "@oconva/qvikchat/history";
 
 // Initialize Firebase App
 const firebaseApp = getFirebaseApp();

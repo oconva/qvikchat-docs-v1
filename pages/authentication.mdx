@@ -17,10 +17,10 @@ To enable authentication, set the `enableAuth` option to `true` when configuring
 For example, the following code snippet demonstrates how to enable authentication using a Firestore API key store:
 
 ```typescript copy {20}
-import { getFirebaseApp } from "qvikchat/firebase";
-import { FirestoreAPIKeyStore } from "qvikchat/auth";
-import { defineChatEndpoint } from "qvikchat/endpoints";
-import { ChatAgent } from "qvikchat/agents";
+import { getFirebaseApp } from "@oconva/qvikchat/firebase";
+import { FirestoreAPIKeyStore } from "@oconva/qvikchat/auth";
+import { defineChatEndpoint } from "@oconva/qvikchat/endpoints";
+import { ChatAgent } from "@oconva/qvikchat/agents";
 
 // Initialize Firebase App
 const firebaseApp = getFirebaseApp();
@@ -49,7 +49,7 @@ The API key store is a collection of API key records. It is used to manage API k
 You can implement your own API Key Store by implementing the `APIKeyStore` interface. The following code snippet demonstrates how to create a custom API key store:
 
 ```typescript copy
-import { APIKeyStore } from "qvikchat/auth";
+import { APIKeyStore } from "@oconva/qvikchat/auth";
 
 export class CustomAPIKeyStore implements APIKeyStore {
   // Implement the APIKeyStore interface

@@ -9,13 +9,13 @@ QvikChat is a framework built on top of Firebase Genkit and LangChain. It allows
 You can install QvikChat using the following command:
 
 ```bash copy
-npm install qvikchat
+npm install @oconva/qvikchat
 ```
 
 Or
 
 ```bash copy
-pnpm add qvikchat
+pnpm add @oconva/qvikchat
 ```
 
 ## Usage
@@ -25,8 +25,8 @@ Before you can deploy your chat endpoints, you need to setup Firebase Genkit, ei
 Create a `index.ts` (or `index.js`) file and add the following code:
 
 ```typescript copy filename="index.ts"
-import { runServer, setupGenkit } from "qvikchat/genkit";
-import { defineChatEndpoint } from "qvikchat/endpoints";
+import { runServer, setupGenkit } from "@oconva/qvikchat/genkit";
+import { defineChatEndpoint } from "@oconva/qvikchat/endpoints";
 
 // Setup Genkit
 setupGenkit();

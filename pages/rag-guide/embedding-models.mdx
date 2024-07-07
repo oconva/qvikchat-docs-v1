@@ -6,7 +6,7 @@ To use an embedding model, simply provide the instance to the `getDataRetriever`
 
 ```typescript copy
 // import embedding model
-import { getDataRetriever } from "qvikchat/data-retrievers";
+import { getDataRetriever } from "@oconva/qvikchat/data-retrievers";
 import { OpenAIEmbeddings } from "@langchain/openai";
 
 // Index data and get retriever
@@ -25,8 +25,8 @@ const dataRetriever = await getDataRetriever({
 If you wish to use a Google Gen AI or an OpenAI embedding model, you can use the `getEmbeddingModel` method to get the embedding model instance.
 
 ```typescript copy
-import { getDataRetriever } from "qvikchat/data-retrievers";
-import { getEmbeddingModel } from "qvikchat/embedding-models";
+import { getDataRetriever } from "@oconva/qvikchat/data-retrievers";
+import { getEmbeddingModel } from "@oconva/qvikchat/embedding-models";
 import { FaissStore } from "@langchain/community/vectorstores/faiss";
 
 // Index data and get retriever

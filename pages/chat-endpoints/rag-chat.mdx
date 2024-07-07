@@ -12,7 +12,7 @@ Context-aware and topic-specific chat with ability to answer user queries by ret
 You can define an RAG chat endpoint with various features such as chat history, response caching, and API key authentication, by simply modifying the configurations provided to the `defineChatEndpoint` function. To use this, first import the method as following:
 
 ```typescript
-import { defineChatEndpoint } from "qvikchat/endpoints";
+import { defineChatEndpoint } from "@oconva/qvikchat/endpoints";
 ```
 
 Below are some of the RAG chat endpoints you can define.
@@ -65,7 +65,7 @@ For failed requests, the response will contain:
 Below example uses a RAG agent to answer user queries related to 'Store Inventory Data'. We'll index this data, store it in a vector store, and use a vector store retriever to retrieve the data when answering user queries.
 
 ```typescript copy {13}
-import { getDataRetriever } from "qvikchat/data-retrievers";
+import { getDataRetriever } from "@oconva/qvikchat/data-retrievers";
 
 // Index inventory data and get retriever
 const inventoryDataRetriever = await getDataRetriever({
@@ -152,7 +152,7 @@ Below example hows how you can define a RAG chat endpoint that supports chat his
 Below RAG agent answers user queries related to 'Store Inventory Data'. We'll index this data, store it in a vector store, and use a vector store retriever to retrieve the data when answering user queries.
 
 ```typescript copy
-import { getDataRetriever } from "qvikchat/data-retrievers";
+import { getDataRetriever } from "@oconva/qvikchat/data-retrievers";
 
 // Index inventory data and get retriever
 const inventoryDataRetriever = await getDataRetriever({
@@ -251,7 +251,7 @@ Below example shows how you can define a RAG chat endpoint that supports chat hi
 Below example uses a RAG agent to answer user queries related to 'Store Inventory Data'. We'll index this data, store it in a vector store, and use a vector store retriever to retrieve the data when answering user queries.
 
 ```typescript copy
-import { getDataRetriever } from "qvikchat/data-retrievers";
+import { getDataRetriever } from "@oconva/qvikchat/data-retrievers";
 
 // Index inventory data and get retriever
 const inventoryDataRetriever = await getDataRetriever({

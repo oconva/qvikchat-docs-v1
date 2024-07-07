@@ -20,7 +20,7 @@ The `ChatAgent` class can be used to create different types of chat agents based
 Example of defining a `close-ended` chat agent:
 
 ```typescript copy
-import { ChatAgent } from "qvikchat/agents";
+import { ChatAgent } from "@oconva/qvikchat/agents";
 
 // Define a close-ended chat agent
 const closeEndedChatAgent = new ChatAgent({
@@ -58,7 +58,7 @@ gpt4
 ### Specifying Model
 
 ```typescript copy {7}
-import { ChatAgent } from "qvikchat/agents";
+import { ChatAgent } from "@oconva/qvikchat/agents";
 
 // Define a close-ended chat agent with a specific LLM model
 const closeEndedChatAgent = new ChatAgent({
@@ -73,7 +73,7 @@ const closeEndedChatAgent = new ChatAgent({
 You can, optionally, also provide additional configuration options for the LLM model.
 
 ```typescript copy {7-17}
-import { ChatAgent } from "qvikchat/agents";
+import { ChatAgent } from "@oconva/qvikchat/agents";
 
 // Define a chat agent with a specific LLM model and configuration
 const chatAgent = new ChatAgent({
@@ -157,7 +157,7 @@ export const defaultChatAgentConfig: DefaultChatAgentConfigType = {
 You can generate responses to user queries using the `generateResponse` method of the `ChatAgent` class.
 
 ```typescript copy
-import { ChatAgent } from "qvikchat/agents";
+import { ChatAgent } from "@oconva/qvikchat/agents";
 
 // Define a chat agent
 const chatAgent = new ChatAgent();

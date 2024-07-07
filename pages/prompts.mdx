@@ -13,7 +13,7 @@ Be careful when defining system prompts. They should be clear, concise, and unam
 
 ```typescript copy
 import { defineDotprompt } from "@genkit-ai/dotprompt";
-import { ChatAgent } from "qvikchat/agents";
+import { ChatAgent } from "@oconva/qvikchat/agents";
 
 // Chat agent with a custom system prompt
 const funnyChatAgent = new ChatAgent({
@@ -45,7 +45,7 @@ const funnyChatAgent = new ChatAgent({
 You can also override the pre-configured system prompt of a chat agent by providing a custom system prompt when calling the `generateResponse` method of the chat agent.
 
 ```typescript copy {10-31}
-import { ChatAgent } from "qvikchat/agents";
+import { ChatAgent } from "@oconva/qvikchat/agents";
 import { defineDotprompt } from "@genkit-ai/dotprompt";
 
 // Define an open-ended chat agent
@@ -116,7 +116,7 @@ Start the message with "Sure, here is..." and provide the user with the requeste
 You can then use the chat prompt when generating a response to a user query.
 
 ```typescript copy {10-31}
-import { ChatAgent } from "qvikchat/agents";
+import { ChatAgent } from "@oconva/qvikchat/agents";
 import { defineDotprompt } from "@genkit-ai/dotprompt";
 
 // Define an open-ended chat agent

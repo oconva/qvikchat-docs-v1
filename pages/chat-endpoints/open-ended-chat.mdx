@@ -5,7 +5,7 @@ Unrestricted chat with no restrictions on what topic the user queries can be rel
 You can define an open-ended chat endpoint with various features such as chat history, response caching, and API key authentication, by simply modifying the configurations provided to the `defineChatEndpoint` function. To use this, first import the method as following:
 
 ```typescript
-import { defineChatEndpoint } from "qvikchat/endpoints";
+import { defineChatEndpoint } from "@oconva/qvikchat/endpoints";
 ```
 
 Below are some of the open-ended chat endpoints you can define.
@@ -134,7 +134,7 @@ For failed requests, the response will contain:
 Below is an example of how you can define an open-ended chat endpoint that supports chat history. Simply, set the `useChatHistory` flag to `true` and provide an a chat history store. For testing, you may use the in-memory chat history store.
 
 ```typescript copy
-import { InMemoryChatHistoryStore } from "qvikchat/history";
+import { InMemoryChatHistoryStore } from "@oconva/qvikchat/history";
 
 // Open-ended chat endpoint with support for chat history
 defineChatEndpoint({

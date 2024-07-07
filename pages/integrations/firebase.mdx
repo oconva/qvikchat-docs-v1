@@ -7,7 +7,7 @@ To setup Firebase for use with QvikChat, you need to do two things:
 1. Modify your genkit configurations that you provide to the `setupGenkit` function to include the Firebase configurations, and specify your Firebase project ID.
 
 ```typescript copy
-import { setupGenkit } from "qvikchat/genkit";
+import { setupGenkit } from "@oconva/qvikchat/genkit";
 
 // Setup Genkit with Firebase project
 setupGenkit({
@@ -34,7 +34,7 @@ That's it! You have successfully setup Firebase for use with QvikChat. You can n
 To initialize a Firebase app, you can use the `getFirebaseApp` function provided by QvikChat.
 
 ```typescript copy
-import { getFirebaseApp } from "qvikchat/integrations/firebase";
+import { getFirebaseApp } from "@oconva/qvikchat/integrations/firebase";
 
 // Initialize Firebase App
 const firebaseApp = getFirebaseApp();
@@ -45,7 +45,7 @@ When calling the `getFirebaseApp` function without passing any value for the `cr
 You can provide additional configurations to the `getFirebaseApp` function. For example, you can specify the path to the service account credentials file and the provide project ID.
 
 ```typescript copy
-import { getFirebaseApp, credential } from "qvikchat/firebase";
+import { getFirebaseApp, credential } from "@oconva/qvikchat/firebase";
 
 // Initialize Firebase App with additional configurations
 getFirebaseApp({
@@ -78,9 +78,9 @@ For more information on how to initialize a Firebase app when using `firebase-ad
 You can use Firestore as a chat history store. To do this, you need to provide the Firestore chat history store to the `ChatAgent` constructor.
 
 ```typescript copy
-import { ChatAgent } from "qvikchat/agents";
-import { getFirebaseApp } from "qvikchat/firebase";
-import { FirestoreChatHistoryStore } from "qvikchat/history";
+import { ChatAgent } from "@oconva/qvikchat/agents";
+import { getFirebaseApp } from "@oconva/qvikchat/firebase";
+import { FirestoreChatHistoryStore } from "@oconva/qvikchat/history";
 
 // Initialize Firebase App
 const firebaseApp = getFirebaseApp();
@@ -100,10 +100,10 @@ const chatAgent = new ChatAgent({
 You can use Firestore as a cache store. To do this, you need to provide the Firestore cache store as the `cacheStore` to the endpoint configurations.
 
 ```typescript copy {20}
-import { getFirebaseApp } from "qvikchat/firebase";
-import { FirestoreCacheStore } from "qvikchat/cache";
-import { defineChatEndpoint } from "qvikchat/endpoints";
-import { ChatAgent } from "qvikchat/agents";
+import { getFirebaseApp } from "@oconva/qvikchat/firebase";
+import { FirestoreCacheStore } from "@oconva/qvikchat/cache";
+import { defineChatEndpoint } from "@oconva/qvikchat/endpoints";
+import { ChatAgent } from "@oconva/qvikchat/agents";
 
 // Initialize Firebase App
 const firebaseApp = getFirebaseApp();
@@ -128,10 +128,10 @@ defineChatEndpoint({
 You can use Firestore as an API key store. To do this, you need to provide the Firestore API key store as the `apiKeyStore` to the endpoint configurations.
 
 ```typescript copy {20}
-import { getFirebaseApp } from "qvikchat/firebase";
-import { FirestoreAPIKeyStore } from "qvikchat/auth";
-import { defineChatEndpoint } from "qvikchat/endpoints";
-import { ChatAgent } from "qvikchat/agents";
+import { getFirebaseApp } from "@oconva/qvikchat/firebase";
+import { FirestoreAPIKeyStore } from "@oconva/qvikchat/auth";
+import { defineChatEndpoint } from "@oconva/qvikchat/endpoints";
+import { ChatAgent } from "@oconva/qvikchat/agents";
 
 // Initialize Firebase App
 const firebaseApp = getFirebaseApp();

@@ -28,7 +28,7 @@ The cache store is a collection of cache records. It is used to manage cache rec
 You can implement your own cache store by implementing the `CacheStore` interface. The following code snippet demonstrates how to create a custom cache store:
 
 ```typescript copy
-import { CacheStore } from "qvikchat/cache";
+import { CacheStore } from "@oconva/qvikchat/cache";
 
 export class CustomCacheStore implements CacheStore {
   // Implement the CacheStore interface
@@ -149,10 +149,10 @@ The in-memory cache store is a simple implementation of the cache store that sto
 To use a custom cache store in your QvikChat endpoint configurations, you need to provide an instance of the cache store in the endpoint configurations. The following code snippet demonstrates how to add a Firestore cache store to the endpoint configurations:
 
 ```typescript copy {20}
-import { getFirebaseApp } from "qvikchat/firebase";
-import { FirestoreCacheStore } from "qvikchat/cache";
-import { defineChatEndpoint } from "qvikchat/endpoints";
-import { ChatAgent } from "qvikchat/agents";
+import { getFirebaseApp } from "@oconva/qvikchat/firebase";
+import { FirestoreCacheStore } from "@oconva/qvikchat/cache";
+import { defineChatEndpoint } from "@oconva/qvikchat/endpoints";
+import { ChatAgent } from "@oconva/qvikchat/agents";
 
 // Initialize Firebase App
 const firebaseApp = getFirebaseApp();
