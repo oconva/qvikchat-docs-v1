@@ -20,6 +20,9 @@ export const QvikChatRagDemoImg = ({
         height={`${height ? height : 500}`}
         alt="QvikChat RAG demo"
         className={className}
+        priority={true}
+        placeholder="blur"
+        blurDataURL="/images/qvikchat-rag-demo.png"
       />
       {showSubtitle && (
         <p className="text-center text-sm text-gray-500 mt-2">

@@ -24,6 +24,22 @@ const config: DocsThemeConfig = {
       titleTemplate: "%s - QvikChat",
     };
   },
+  head: (
+    <>
+      <meta name="description" content="QvikChat - A project by Oconva" />
+      <meta name="twitter:card" content="" />
+      <meta name="twitter:site" content="" />
+      <meta name="og:title" content="QvikChat" />
+      <meta name="og:description" content="QvikChat - A project by Oconva" />
+      <meta
+        name="apple-mobile-web-app-title"
+        content="QvikChat - A project by Oconva"
+      />
+      <link rel="icon" href="icon.ico" />
+      <link rel="mask-icon" href="icon.ico" color="#000000" />
+      <link rel="apple-touch-icon" type="image/svg+xml" href="icon.ico" />
+    </>
+  ),
 };
 
 export default config;
