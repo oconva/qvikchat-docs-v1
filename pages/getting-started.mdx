@@ -45,7 +45,7 @@ That's it! Running the above code will run a <Link href="https://expressjs.com/"
 You should be able to access the chat endpoint defined above at the `chat` endpoint. To test from terminal, you can try the below command:
 
 ```bash copy
-curl -X POST "http://127.0.0.1:3400/chat" -H "Content-Type: application/json"  -d '{"data": "Answer in one sentence: What is Firebase Firestore?" }'
+curl -X POST "http://127.0.0.1:3400/chat" -H "Content-Type: application/json"  -d '{"data": { "query": "Answer in one sentence: What is Firebase Firestore?" } }'
 ```
 
 Above example points to `http://127.0.0.1:3400`. You can change this port and host depending on where you are running the server and on which port.
@@ -64,55 +64,35 @@ QvikChat provides out-of-the-box support for using Firebase Firestore as a chat 
 
 ## QvikChat Starter Template
 
-To get up and running quickly, you can use the QvikChat starter template. The starter template is a pre-configured project with all the necessary configurations and setup to get you started with QvikChat. It also includes the setup for TypeScript, ESLint, Prettier, Jest and more, and uses SWC for faster compilation.
+To get up and running quickly, you can use the QvikChat starter template. The starter template is a pre-configured project with all the necessary configurations and setup to get you started with QvikChat write quality and reliable code. It comes pre-configured with support for TypeScript, ESLint, Prettier, Jest, SWC, and more, so you can get started with developing the next revolutionary chat app right away, without worrying about all these things.
 
-Simply, clone the [QvikChat starter template](https://github.com/oconva/qvikchat-starter-template.git) to get started.
+Simply, clone the [QvikChat starter template](https://github.com/oconva/qvikchat-starter-template) to get started.
 
 ```bash copy
 git clone https://github.com/oconva/qvikchat-starter-template.git
 ```
 
-## Developing From Source Code
+Once you have cloned the starter template, you can run the following commands to get started:
 
-You may want to develop from the source code if you want to extend or modify the functionality of QvikChat for your use case.
+```bash copy
+cd qvikchat-starter-template
+npm install # or pnpm install
+npm run start # or pnpm start
+```
 
-1.  Clone this repository.
+To build the project, run:
 
-    ```bash copy
-    git clone https://github.com/oconva/qvikchat.git
-    ```
+```bash copy
+npm run build # or pnpm build
+```
 
-2.  Install dependencies.
+And to run the included tests, run:
 
-    ```bash copy
-    npm install
-    ```
+```bash copy
+npm run test # or pnpm test
+```
 
-    Or
-
-    ```bash copy
-    pnpm add
-    ```
-
-3.  By default this project uses Google's Gemini models (specifically, `gemini-1.5-flash`).
-
-        Add your Google AI API key in the `.env` file.
-
-        ```bash copy
-        GOOGLE_GENAI_API_KEY=<your GOOGLE_GENAI_API_KEY>
-        ```
-
-    You may choose to use a different model. Configure the genkit plugins accordingly and supply the model to the `ChatAgent` constructor when defining a chat endpoint. For more information on configuring Genkit plugins to use a different model [check here](https://firebase.google.com/docs/genkit/models#models).
-
-    Out-of-the-box, QvikChat also supports OpenAI models and Firebase Firestore (for chat history store, cache store and API key store). If you wish to use any of these, add the required API keys for these to the `.env` file as well.
-
-    ```bash copy
-    GOOGLE_GENAI_API_KEY=<your GOOGLE_GENAI_API_KEY>
-    OPENAI_API_KEY=<your OPENAI_API_KEY>
-    FIREBASE_API_KEY=<your FIREBASE_API_KEY>
-    ```
-
-From here on, you have two options.
+To learn more about the QvikChat starter template, check the [QvikChat Starter Template](https://github.com/oconva/qvikchat-starter-template) repo.
 
 ## Testing
 
@@ -169,3 +149,43 @@ Or
 ```bash copy
 pnpm start
 ```
+
+## Developing From Source Code
+
+You may want to develop from the source code if you want to extend or modify the functionality of QvikChat for your use case.
+
+1.  Clone this repository.
+
+    ```bash copy
+    git clone https://github.com/oconva/qvikchat.git
+    ```
+
+2.  Install dependencies.
+
+    ```bash copy
+    npm install
+    ```
+
+    Or
+
+    ```bash copy
+    pnpm add
+    ```
+
+3.  By default this project uses Google's Gemini models (specifically, `gemini-1.5-flash`).
+
+        Add your Google AI API key in the `.env` file.
+
+        ```bash copy
+        GOOGLE_GENAI_API_KEY=<your GOOGLE_GENAI_API_KEY>
+        ```
+
+    You may choose to use a different model. Configure the genkit plugins accordingly and supply the model to the `ChatAgent` constructor when defining a chat endpoint. For more information on configuring Genkit plugins to use a different model [check here](https://firebase.google.com/docs/genkit/models#models).
+
+    Out-of-the-box, QvikChat also supports OpenAI models and Firebase Firestore (for chat history store, cache store and API key store). If you wish to use any of these, add the required API keys for these to the `.env` file as well.
+
+    ```bash copy
+    GOOGLE_GENAI_API_KEY=<your GOOGLE_GENAI_API_KEY>
+    OPENAI_API_KEY=<your OPENAI_API_KEY>
+    FIREBASE_API_KEY=<your FIREBASE_API_KEY>
+    ```
