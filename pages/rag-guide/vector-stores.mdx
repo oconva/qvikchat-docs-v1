@@ -1,0 +1,23 @@
+# Vector Store
+
+The vector store is used to store the generated embeddings. The vector store is an efficient way to store and query embeddings.
+
+QvikChat provides support for more than 30+ vector stores such as Faiss, Pinecone, Chroma and more, through LangChain. To see available vector stores, refer to this page [Vector stores](https://js.langchain.com/v0.2/docs/integrations/vectorstores).
+
+To use a vector store, simply provide the instance to the `getDataRetriever` method. The below example shows how you can use a Faiss vector store to store the embeddings. You will need to provide the vector store instance the embedding model you want to use with it. If you wish to use a Google Gen AI or an OpenAI embedding model, you can use the `getEmbeddingModel` method to get the embedding model instance.
+
+```typescript copy
+import { getDataRetriever } from "qvikchat/data-retrievers";
+import { getEmbeddingModel } from "qvikchat/embedding-models";
+import { FaissStore } from "@langchain/community/vectorstores/faiss";
+
+// Index data and get retriever
+const dataRetriever = await getDataRetriever({
+  dataType: "csv",
+  filePath: "test.csv",
+  generateEmbeddings: true,
+  vectorStore: new FaissStore(getEmbeddingModel(), {
+    index: "test-index",
+  }),
+});
+```

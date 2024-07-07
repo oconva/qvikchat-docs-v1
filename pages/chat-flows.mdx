@@ -1,0 +1,35 @@
+# Chat Endpoints
+
+You can define various chat endpoints based on your requirements.
+
+For each chat endpoint you define, you can easily toggle features on and off. For example, you can enable chat history for any endpoint by simply setting `enableChatHistory` to `true`.
+
+It is this flexibility that QvikChat provides that enables you to quickly define custom chat endpoints with only a few lines of code.
+
+All chat endpoints can be defined using a single method: `defineChatEndpoint`. This method takes a configuration object as an argument, which allows you to define the chat endpoint based on your requirements.
+
+You can import the `defineChatEndpoint` method as shown below:
+
+```typescript copy
+import { defineChatEndpoint } from "qvikchat/endpoints";
+```
+
+Below are the three types of chat agents you can define:
+
+## Open-Ended Chat
+
+Unrestricted chat with no restrictions on what topic the user queries can be related to, quite similar to OpenAI's ChatGPT or Google's Gemini front-ends.
+
+[Read more](chat-endpoints/open-ended-chat)
+
+## Close-Ended Chat
+
+Chat endpoint where user queries are restricted to a specific topic. Prevents misuse of the chat service by restricting the usage, for example, a chat service meant to answer queries related to a specific topic like Firebase won't answer user queries related to other topics like solving a calculus assignment question.
+
+[Read more](chat-endpoints/close-ended-chat)
+
+## RAG Chat (Retrieval Augmented Generation)
+
+Context-aware and topic-specific chat with ability to answer user queries by retrieving additional context information from a knowledge base (e.g. from a JSON file or PDF).
+
+[Read more](chat-endpoints/rag-chat)

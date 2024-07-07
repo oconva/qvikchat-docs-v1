@@ -1,0 +1,41 @@
+# Embedding Models
+
+You can provide your own embedding model to generate embeddings for the data. There are more than 20+ embedding models supported by QvikChat through LangChain. To check the list of available embedding models, refer to this page [Embedding models](https://js.langchain.com/v0.2/docs/integrations/text_embedding).
+
+To use an embedding model, simply provide the instance to the `getDataRetriever` method. The below example shows how you can use an OpenAI embedding model to generate embeddings for the data.
+
+```typescript copy
+// import embedding model
+import { getDataRetriever } from "qvikchat/data-retrievers";
+import { OpenAIEmbeddings } from "@langchain/openai";
+
+// Index data and get retriever
+const dataRetriever = await getDataRetriever({
+  dataType: "csv",
+  filePath: "test.csv",
+  generateEmbeddings: true,
+  embeddingModel: new OpenAIEmbeddings({
+    apiKey: process.env.OPENAI_API_KEY, // checks for OPENAI_API_KEY in .env file by default if not provided
+    batchSize: 512, // Default value if omitted is 512. Max is 2048
+    model: "text-embedding-3-large", // model name
+  }),
+});
+```
+
+If you wish to use a Google Gen AI or an OpenAI embedding model, you can use the `getEmbeddingModel` method to get the embedding model instance.
+
+```typescript copy
+import { getDataRetriever } from "qvikchat/data-retrievers";
+import { getEmbeddingModel } from "qvikchat/embedding-models";
+import { FaissStore } from "@langchain/community/vectorstores/faiss";
+
+// Index data and get retriever
+const dataRetriever = await getDataRetriever({
+  dataType: "csv",
+  filePath: "test.csv",
+  generateEmbeddings: true,
+  vectorStore: new FaissStore(getEmbeddingModel(), {
+    index: "test-index",
+  }),
+});
+```

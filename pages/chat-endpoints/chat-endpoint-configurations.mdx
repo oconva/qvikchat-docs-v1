@@ -1,0 +1,61 @@
+# Chat Endpoint Configurations
+
+You can configure a chat endpoint with various features such as chat history, response caching, and API key authentication, by simply modifying the configurations provided to the `defineChatEndpoint` function. To use this, first import the method as following:
+
+```typescript copy
+import { defineChatEndpoint } from "qvikchat/endpoints";
+```
+
+Below are some of the chat endpoint configurations you can define.
+
+```typescript copy
+/**
+ * Represents the parameters for defining a chat endpoint.
+ */
+export interface DefineChatEndpointParams {
+  /**
+   * The chat agent used for the endpoint.
+   */
+  chatAgent: ChatAgent;
+
+  /**
+   * The endpoint for the chat endpoint.
+   */
+  endpoint: string;
+
+  /**
+   * Optional flag to enable chat history.
+   */
+  enableChatHistory?: boolean;
+
+  /**
+   * Optional flag to enable authentication.
+   */
+  enableAuth?: boolean;
+
+  /**
+   * Optional API key store.
+   */
+  apiKeyStore?: APIKeyStore;
+
+  /**
+   * Optional flag to enable caching.
+   */
+  enableCache?: boolean;
+
+  /**
+   * Optional cache store.
+   */
+  cacheStore?: CacheStore;
+
+  /**
+   * Optional flag to enable RAG (Retrieve, Answer, Generate) functionality.
+   */
+  enableRAG?: boolean;
+
+  /**
+   * Optional method to retrieve documents for RAG.
+   */
+  retriever?: TextDataRetriever;
+}
+```

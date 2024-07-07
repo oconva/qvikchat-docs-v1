@@ -1,0 +1,25 @@
+{
+  "index": "Introduction",
+  "getting-started": "Getting Started",
+  "chat-endpoints": "Chat Endpoints",
+  "chat-agent": "Chat Agent",
+  "chat-history": "Chat History",
+  "prompts": "Prompts",
+  "rag-guide": "RAG Guide",
+  "caching": "Caching",
+  "authentication": "Authentication",
+  "integrations": "Integrations",
+  "another": {
+    "display": "hidden"
+  },
+  "about": {
+    "title": "About",
+    "type": "page"
+  },
+  "contact": {
+    "title": "Contact ↗",
+    "type": "page",
+    "href": "https://forms.gle/a3cEXytYX29PkoL59",
+    "newWindow": true
+  }
+}

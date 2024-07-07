@@ -1,0 +1,200 @@
+import { Notice } from "../components/notice";
+
+# Chat Agent
+
+Chat Agent class provides the methods required to interact with the LLM model and generate responses to user queries. The class provides methods to generate responses and configure chat history.
+
+## Types of Chat Agents
+
+```typescript copy
+//Represents the type of chat agent
+export type ChatAgentType = "open-ended" | "close-ended" | "rag";
+```
+
+The `ChatAgent` class can be used to create different types of chat agents based on the `ChatAgentType`:
+
+- `open-ended`: An open-ended chat agent that can generate responses to user queries without any constraints.
+- `close-ended`: A close-ended chat agent that only generate responses to queries that are related to a specific **topic**.
+- `rag`: A chat agent that uses the Retrieval-Augmented Generation (RAG) model to generate responses to user queries.
+
+Example of defining a `close-ended` chat agent:
+
+```typescript copy
+import { ChatAgent } from "qvikchat/agents";
+
+// Define a close-ended chat agent
+const closeEndedChatAgent = new ChatAgent({
+  agentType: "close-ended",
+  topic: "Store Inventory Data",
+});
+```
+
+## LLM Model
+
+You can configure the chat agent to use a specific **_supported_** LLM model.
+
+<Notice>
+  The model name that you provide to the `ChatAgent` instance must be one of the
+  supported LLM models, or name of a model that you've setup when configuring
+  Genkit (`setupGenkit`).
+</Notice>
+
+### Supported LLM Models
+
+You can provide one of the following model names for the `model` property when creating a `ChatAgent` instance:
+
+```
+gemini10Pro
+gemini15Pro
+gemini15Flash
+geminiProVision
+gpt35Turbo
+gpt4o
+gpt4Turbo
+gpt4Vision
+gpt4
+```
+
+### Specifying Model
+
+```typescript copy {7}
+import { ChatAgent } from "qvikchat/agents";
+
+// Define a close-ended chat agent with a specific LLM model
+const closeEndedChatAgent = new ChatAgent({
+  agentType: "close-ended",
+  topic: "Store Inventory Data",
+  model: "gemini15Flash",
+});
+```
+
+### Configuring Model
+
+You can, optionally, also provide additional configuration options for the LLM model.
+
+```typescript copy {7-17}
+import { ChatAgent } from "qvikchat/agents";
+
+// Define a chat agent with a specific LLM model and configuration
+const chatAgent = new ChatAgent({
+  topic: "Store Inventory Data",
+  model: "gemini15Flash",
+  modelConfig: {
+    version: "latest",
+    temperature: 0.5,
+    maxOutputTokens: 2048,
+    safetySettings: [
+      {
+        category: "HARM_CATEGORY_DANGEROUS_CONTENT",
+        threshold: "BLOCK_LOW_AND_ABOVE",
+      },
+    ],
+  },
+});
+```
+
+## All Chat Agent Configurations
+
+```typescript copy
+/**
+ * Represents the type of chat agent.
+ */
+export type ChatAgentType = "open-ended" | "close-ended" | "rag";
+
+/**
+ * Represents the configuration for the agent type.
+ * @property agentType - The type of agent.
+ * @property topic - The topic for the agent type.
+ */
+export type AgentTypeConfig =
+  | {
+      agentType?: "open-ended";
+    }
+  | {
+      agentType: "close-ended" | "rag";
+      topic: string;
+    };
+
+/**
+ * Represents the configuration for the chat agent.
+ *
+ * @property agentType - The type of agent.
+ * @property topic - The topic for the chat agent.
+ * @property systemPrompt - The system prompt for the chat agent.
+ * @property chatPrompt - The chat prompt for the chat agent.
+ * @property enableChatHistory - Indicates whether to use chat history.
+ * @property chatHistoryStore - The chat history store.
+ * @property tools - Tools for the chat agent.
+ * @property model - The supported model to use for chat completion.
+ * @property modelConfig - The model configuration.
+ */
+export type ChatAgentConfig = {
+  systemPrompt?: Dotprompt;
+  chatPrompt?: Dotprompt;
+  enableChatHistory?: boolean;
+  chatHistoryStore?: ChatHistoryStore;
+  tools?: ToolArgument[];
+  model?: SupportedModels;
+  modelConfig?: ModelConfig;
+} & AgentTypeConfig;
+```
+
+## Default Chat Agent Configuration
+
+```typescript copy
+/**
+ * Represents the default chat agent configuration.
+ */
+export const defaultChatAgentConfig: ChatAgentConfig = {
+  agentType: "open-ended",
+  useChatHistory: false,
+  model: "gemini15Flash",
+};
+```
+
+## Generating Responses
+
+You can generate responses to user queries using the `generateResponse` method of the `ChatAgent` class.
+
+```typescript copy
+import { ChatAgent } from "qvikchat/agents";
+
+// Define a chat agent
+const chatAgent = new ChatAgent();
+
+// Generate a response
+const response = await chatAgent.generateResponse({
+  query: "What is the capital of France?",
+});
+```
+
+### Response Generation Parameters
+
+Depending on your use case, you can provide additional parameters when generating a response.
+
+```typescript copy
+/**
+ * Represents the properties for generating a response.
+ *
+ * @property query - The query string.
+ * @property context - The context object.
+ * @property chatId - The ID of the chat history.
+ * @property history - The chat history.
+ * @property tools - The tool arguments.
+ * @property model - The supported model.
+ * @property modelConfig - The model configuration.
+ * @property systemPrompt - The system prompt.
+ * @property chatPrompt - The chat prompt.
+ */
+export type GenerateResponseProps = {
+  query: string;
+  context?: any;
+  chatId?: string;
+  history?: MessageData[];
+  tools?: ToolArgument[];
+  model?: SupportedModels;
+  modelConfig?: ModelConfig;
+  systemPrompt?: Dotprompt;
+  chatPrompt?: Dotprompt;
+};
+```

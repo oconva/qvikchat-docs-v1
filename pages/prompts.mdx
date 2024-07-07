@@ -1,0 +1,153 @@
+# Prompts
+
+QvikChat uses [Dotprompt](https://firebase.google.com/docs/genkit/dotprompt.md) to define system and chat prompts. These prompts ensure safety, accuracy, and reliability. They are designed to mitigate LLM hallucination and deter prompt injection attacks.
+
+- **System prompts** are used for setting up the behavior of the chat agent
+- **Chat prompts** are used for continued user queries which are part of an ongoing conversation. These chat prompts may include chat history, additional context information, etc.
+
+## System Prompts
+
+You can provide a system prompt when setting up a chat agent. If no system prompt is provided, QvikChat uses a default system prompt based on the provided agent type.
+
+Be careful when defining system prompts. They should be clear, concise, and unambiguous. They should also be designed to mitigate LLM hallucination and implement safety guardrails to safegaurd the user and block usage of the service for unintended purposes. If in doubt, avoid defining a custom system prompt and use the default system prompt provided by QvikChat.
+
+```typescript copy
+import { defineDotprompt } from "@genkit-ai/dotprompt";
+import { ChatAgent } from "qvikchat/agents";
+
+// Chat agent with a custom system prompt
+const funnyChatAgent = new ChatAgent({
+  systemPrompt: defineDotprompt(
+    {
+      name: "customSystemPrompt",
+      model: "googleai/gemini-1.5-flash-latest",
+      input: {
+        schema: z.object({
+          query: z.string().optional(),
+        }),
+      },
+      output: {
+        format: "text",
+      },
+    },
+    `{{role "system"}}
+		Answer user query with humor. If no query is provided, greet the user with a funny message.
+		
+		{{#if query}}
+		{{role "user"}}
+		User query
+		{{query}}
+		{{/if}}`
+  ),
+});
+```
+
+You can also override the pre-configured system prompt of a chat agent by providing a custom system prompt when calling the `generateResponse` method of the chat agent.
+
+```typescript copy {10-31}
+import { ChatAgent } from "qvikchat/agents";
+import { defineDotprompt } from "@genkit-ai/dotprompt";
+
+// Define an open-ended chat agent
+const chatAgent = new ChatAgent();
+
+// Override the system prompt for a chat agent
+const response = await chatAgent.generateResponse({
+  query: "What is the capital of France?",
+  systemPrompt: defineDotprompt(
+    {
+      name: "customSystemPrompt",
+      model: "googleai/gemini-1.5-flash-latest",
+      input: {
+        schema: z.object({
+          query: z.string().optional(),
+        }),
+      },
+      output: {
+        format: "text",
+      },
+    },
+    `{{role "system"}}
+    Answer user query with humor. If no query is provided, greet the user with a funny message.
+
+    {{#if query}}
+    {{role "user"}}
+    User query
+    {{query}}
+    {{/if}}`
+  ),
+});
+```
+
+## Chat Prompts
+
+Chat prompts are used for continued user queries which are part of an ongoing conversation. These chat prompts may include chat history, additional context information, etc.
+
+When defining chat prompts, you can use the `defineDotprompt` function to create a chat prompt. The chat prompt can be used to provide additional context information to the user, ask follow-up questions, or provide chat history.
+
+```typescript copy
+import { defineDotprompt } from "@genkit-ai/dotprompt";
+
+// Define a chat prompt
+const chatPrompt = defineDotprompt(
+  {
+    name: "customChatPrompt",
+    model: "googleai/gemini-1.5-flash-latest",
+    input: {
+      schema: z.object({
+        query: z.string().optional(),
+      }),
+    },
+    output: {
+      format: "text",
+    },
+  },
+  `{{role "system"}}
+Start the message with "Sure, here is..." and provide the user with the requested information.
+
+    {{#if query}}
+    {{role "user"}}
+    User query
+    {{query}}
+    {{/if}}`
+);
+```
+
+You can then use the chat prompt when generating a response to a user query.
+
+```typescript copy {10-31}
+import { ChatAgent } from "qvikchat/agents";
+import { defineDotprompt } from "@genkit-ai/dotprompt";
+
+// Define an open-ended chat agent
+const chatAgent = new ChatAgent();
+
+// Generate a response with a chat prompt
+const response = await chatAgent.generateResponse({
+  query: "What is the capital of France?",
+  chatPrompt: defineDotprompt(
+    {
+      name: "customChatPrompt",
+      model: "googleai/gemini-1.5-flash-latest",
+      input: {
+        schema: z.object({
+          query: z.string().optional(),
+        }),
+      },
+      output: {
+        format: "text",
+      },
+    },
+    `{{role "system"}}
+    Start the message with "Sure, here is..." and provide the user with the requested information.
+
+    {{#if query}}
+    {{role "user"}}
+    User query
+    {{query}}
+    {{/if}}`
+  ),
+});
+```
+
+When defining chat prompts, be sure to provide clear, concise, and unambiguous prompts. These prompts should be designed to guide the model through the conversation and provide additional context information when needed. If in doubt, avoid defining a custom chat prompt and use the default chat prompt provided by QvikChat.

@@ -1,0 +1,171 @@
+import Link from "next/link";
+
+# Getting Started
+
+QvikChat is a framework built on top of Firebase Genkit and LangChain. It allows you to quickly create and deploy a chat service, with support for advance features such as safety guardrails, authentication, response caching, chat history and more.
+
+## Installation
+
+You can install QvikChat using the following command:
+
+```bash copy
+npm install qvikchat
+```
+
+Or
+
+```bash copy
+pnpm add qvikchat
+```
+
+## Usage
+
+Before you can deploy your chat endpoints, you need to setup Firebase Genkit, either by using the default configurations or by providing your own configurations, these may include additional Genkit plugins you may want to enable (e.g. to add support for a new language model). When starting out, we recommend using the default configurations.
+
+Create a `index.ts` (or `index.js`) file and add the following code:
+
+```typescript copy filename="index.ts"
+import { runServer, setupGenkit } from "qvikchat/genkit";
+import { defineChatEndpoint } from "qvikchat/endpoints";
+
+// Setup Genkit
+setupGenkit();
+
+// Open-ended chat
+defineChatEndpoint({
+  endpoint: "chat",
+});
+
+// Run server
+runServer();
+```
+
+That's it! Running the above code will run a <Link href="https://expressjs.com/" target="_blank" className="text-primary hover:text-primary-hover">Express</Link> server with your defined chat endpoints accessible through it.
+
+You should be able to access the chat endpoint defined above at the `chat` endpoint. To test from terminal, you can try the below command:
+
+```bash copy
+curl -X POST "http://127.0.0.1:3400/chat" -H "Content-Type: application/json"  -d '{"data": "Answer in one sentence: What is Firebase Firestore?" }'
+```
+
+Above example points to `http://127.0.0.1:3400`. You can change this port and host depending on where you are running the server and on which port.
+
+### How it works?
+
+Each chat service is defined by defining a chat endpoint. The chat endpoint that you define, is the code that gets called when a new request is received at that endpoint. You can define multiple chat services, each with its own endpoint. Each chat endpoint can have various attributes like input data schema, LLM model to be used for processing queries, authentication policy, etc., and you can define these properties and the code that gets executed within an endpoint when defining a chat endpoint.
+
+QvikChat provides you with an easy way to define these chat endpoints _qvikly_ using the **`defineChatEndpoint`** function. This is the real superpower of QvikChat. You can define a chat endpoint with support for chat history, authentication and response caching in just a few lines of code.
+
+To learn more about different chat endpoints that you can define, check the [Chat Endpoints](/chat-endpoints) section.
+
+### Firebase
+
+QvikChat provides out-of-the-box support for using Firebase Firestore as a chat history store, cache store and API key store. To learn how to setup Firebase, check the [Firebase](/integrations/firebase) section.
+
+## QvikChat Starter Template
+
+To get up and running quickly, you can use the QvikChat starter template. The starter template is a pre-configured project with all the necessary configurations and setup to get you started with QvikChat. It also includes the setup for TypeScript, ESLint, Prettier, Jest and more, and uses SWC for faster compilation.
+
+Simply, clone the [QvikChat starter template](https://github.com/oconva/qvikchat-starter-template.git) to get started.
+
+```bash copy
+git clone https://github.com/oconva/qvikchat-starter-template.git
+```
+
+## Developing From Source Code
+
+You may want to develop from the source code if you want to extend or modify the functionality of QvikChat for your use case.
+
+1.  Clone this repository.
+
+    ```bash copy
+    git clone https://github.com/oconva/qvikchat.git
+    ```
+
+2.  Install dependencies.
+
+    ```bash copy
+    npm install
+    ```
+
+    Or
+
+    ```bash copy
+    pnpm add
+    ```
+
+3.  By default this project uses Google's Gemini models (specifically, `gemini-1.5-flash`).
+
+        Add your Google AI API key in the `.env` file.
+
+        ```bash copy
+        GOOGLE_GENAI_API_KEY=<your GOOGLE_GENAI_API_KEY>
+        ```
+
+    You may choose to use a different model. Configure the genkit plugins accordingly and supply the model to the `ChatAgent` constructor when defining a chat endpoint. For more information on configuring Genkit plugins to use a different model [check here](https://firebase.google.com/docs/genkit/models#models).
+
+    Out-of-the-box, QvikChat also supports OpenAI models and Firebase Firestore (for chat history store, cache store and API key store). If you wish to use any of these, add the required API keys for these to the `.env` file as well.
+
+    ```bash copy
+    GOOGLE_GENAI_API_KEY=<your GOOGLE_GENAI_API_KEY>
+    OPENAI_API_KEY=<your OPENAI_API_KEY>
+    FIREBASE_API_KEY=<your FIREBASE_API_KEY>
+    ```
+
+From here on, you have two options.
+
+## Testing
+
+You can test the pre-defined test endpoints to see how the chat endpoints work and to confirm QvikChat setup. Below are the two ways you can do this. Refer to the [Chat Endpoints](/chat-endpoints) section for more information on the different types of chat endpoints that you can test (and available pre-defined endpoints).
+
+### Genkit Developer UI
+
+You can run the Genkit developer UI to test the endpoints. Testing the endpoints using a graphical interface is probably the easiest way to get started. You can know more about the Genkit Developer UI [here](https://firebase.google.com/docs/genkit/devtools#genkit_developer_ui).
+
+Start the Genkit developer UI:
+
+```bash copy
+npx genkit start
+```
+
+OR, you can install the Genkit CLI globally:
+
+```bash copy
+npm i -g genkit
+```
+
+Then start the Genkit developer UI:
+
+```bash copy
+genkit start
+```
+
+### Running the Server
+
+You can also run the server locally to test the endpoints from their REST endpoints.
+
+Before you can do this, you will need to first compile the TypeScript code.
+
+Compile the TypeScript code. You can modify `.swcrc` to change the SWC configurations and `package.json` to adjust the build command.
+
+```bash copy
+npm run build
+```
+
+Or
+
+```bash copy
+pnpm build
+```
+
+Then, start the server:
+
+```bash copy
+npm start
+```
+
+Or
+
+```bash copy
+pnpm start
+```

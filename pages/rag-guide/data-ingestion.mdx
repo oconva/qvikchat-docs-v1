@@ -1,0 +1,82 @@
+# Data Ingestion
+
+This section provides an overview of the data ingestion process in RAG. The data ingestion process is the process of loading data from various sources into a vector store. The data can be loaded from various sources such as databases, files, and APIs.
+
+## Overview
+
+The data ingestion process in RAG involves the following steps:
+
+1. **Data Collection**: Collected data from source and store it locally.
+2. **Data Loading**: Load file, or multiple files, into `Document` objects.
+3. **Data Chunking**: Chunk the data into smaller parts. This is important for two reasons: (1) it makes it easier to index data, and (2) it makes it easier to query data. Furthermore, since most LLM models have a finite context window (or input size), having smaller chunks of data ensures relevant context information isn't lost.
+4. **Embedding Generation**: Generate embeddings for each chunk of data. This is done using an embedding model. An embedding model converts text data into a numerical representation, and the distance between these numerical representations is used to determine the similarity between two pieces of text.
+5. **Storage**: The generate vector embeddings are then stored in an efficient vector store.
+
+## Data Loading Options
+
+With QvikChat, you can configure the data loading options when calling the `getDataRetriever` method.
+
+```typescript copy
+dataType: SupportedDataLoaderTypes; // specify the data type (helps ascertain best splitting strategy when not specified)
+filePath: string; // path to the file to load
+jsonLoaderKeysToInclude?: JSONLoaderKeysToInclude; // specify keys to include when loading JSON data
+csvLoaderOptions?: CSVLoaderOptions; // specify options when loading CSV data
+pdfLoaderOptions?: PDFLoaderOptions; // specify options when loading PDF data
+dataSplitterType?: SupportedDataSplitterTypes; // if you want to specify the data splitter type
+chunkingConfig?: ChunkingConfig; // data chunking configuration
+splitterConfig?: DataSplitterConfig; // data splitter configuration
+vectorStore?: VectorStore; // vector store instance to use
+embeddingModel?: EmbeddingsInterface; // embedding model to use for generating embeddings
+```
+
+## Data Chunking
+
+Be careful when specifying the data chunking configurations. In most cases, the chunk size, overlap and other parameters would depend highly on the data. It is recommended to experiment with different configurations to find the best one for your use case. There are, however, some default configurations that can be used, for example, for CSV data each row (or line) can be a chunk. If not sure, start with the default configurations and then experiment with different configurations.
+
+## Embedding Model
+
+You can provide your own embedding model to generate embeddings for the data. There are more than 20+ embedding models supported by QvikChat through LangChain. To check the list of available embedding models, refer to this page [Embedding models](https://js.langchain.com/v0.2/docs/integrations/text_embedding).
+
+To use an embedding model, simply provide the instance to the `getDataRetriever` method. The below example shows how you can use an OpenAI embedding model to generate embeddings for the data.
+
+```typescript copy
+// import embedding model
+import { getDataRetriever } from "qvikchat/data-retrievers";
+import { OpenAIEmbeddings } from "@langchain/openai";
+
+// Index data and get retriever
+const dataRetriever = await getDataRetriever({
+  dataType: "csv",
+  filePath: "test.csv",
+  generateEmbeddings: true,
+  embeddingModel: new OpenAIEmbeddings({
+    apiKey: process.env.OPENAI_API_KEY, // checks for OPENAI_API_KEY in .env file by default if not provided
+    batchSize: 512, // Default value if omitted is 512. Max is 2048
+    model: "text-embedding-3-large", // model name
+  }),
+});
+```
+
+## Vector Store
+
+The vector store is used to store the generated embeddings. The vector store is an efficient way to store and query embeddings.
+
+QvikChat provides support for more than 30+ vector stores such as Faiss, Pinecone, Chroma and more, through LangChain. To see available vector stores, refer to this page [Vector stores](https://js.langchain.com/v0.2/docs/integrations/vectorstores).
+
+To use a vector store, simply provide the instance to the `getDataRetriever` method. The below example shows how you can use a Faiss vector store to store the embeddings. You will need to provide the vector store instance the embedding model you want to use with it. If you wish to use a Google Gen AI or an OpenAI embedding model, you can use the `getEmbeddingModel` method to get the embedding model instance.
+
+```typescript copy
+import { getDataRetriever } from "qvikchat/data-retrievers";
+import { getEmbeddingModel } from "qvikchat/embedding-models";
+import { FaissStore } from "@langchain/community/vectorstores/faiss";
+
+// Index data and get retriever
+const dataRetriever = await getDataRetriever({
+  dataType: "csv",
+  filePath: "test.csv",
+  generateEmbeddings: true,
+  vectorStore: new FaissStore(getEmbeddingModel(), {
+    index: "test-index",
+  }),
+});
+```

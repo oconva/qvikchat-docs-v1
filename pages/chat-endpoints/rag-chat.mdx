@@ -1,0 +1,299 @@
+# RAG Chat
+
+Context-aware and topic-specific chat with ability to answer user queries by retrieving additional context information from a knowledge base (e.g. from a JSON file or PDF).
+
+<blockquote className="mt-5 border-l-2 border-blue-400 font-light pl-4">
+  Please note: For this to work, you must first ingest data into a vector store
+  and provide a retriever to the chat endpoint. For more information refer to:
+  [RAG Guide](/rag-guide) | [Data Ingestion](/rag/data-ingestion) | [Data
+  Retriever](/rag/data-retrieval)
+</blockquote>
+
+You can define an RAG chat endpoint with various features such as chat history, response caching, and API key authentication, by simply modifying the configurations provided to the `defineChatEndpoint` function. To use this, first import the method as following:
+
+```typescript
+import { defineChatEndpoint } from "qvikchat/endpoints";
+```
+
+Below are some of the RAG chat endpoints you can define.
+
+## RAG Chat
+
+Simple RAG chat with no additional features. Uses RAG to answer user queries by retrieving additional context information (e.g. from a text or JSON file).
+
+### Expected Input Schema
+
+Request body data:
+
+- `query`: User query to chat agent.
+
+  ```json
+  {
+    "data": {
+      "query": "string"
+    },
+    "required": ["query"]
+  }
+  ```
+
+### Output Schema
+
+For successful requests, the response will contain:
+
+- `response`: Chat agent response to the user query, returned as a string by default.
+
+  ```json
+  {
+    "result": {
+      "response": "string"
+    }
+  }
+  ```
+
+For failed requests, the response will contain:
+
+- `error`: Error message returned by the server.
+
+  ```json
+  {
+    "error": "string"
+  }
+  ```
+
+### Usage
+
+Below example uses a RAG agent to answer user queries related to 'Store Inventory Data'. We'll index this data, store it in a vector store, and use a vector store retriever to retrieve the data when answering user queries.
+
+```typescript copy {13}
+import { getDataRetriever } from "qvikchat/data-retrievers";
+
+// Index inventory data and get retriever
+const inventoryDataRetriever = await getDataRetriever({
+  dataType: "csv",
+  filePath: "rag/knowledge-base/test-data/inventory-data.csv",
+  generateEmbeddings: true,
+});
+
+// Inventory Data chat endpoint with support for RAG
+defineChatEndpoint({
+  endpoint: "chat-rag-inventory",
+  enableRAG: true,
+  retriever: inventoryDataRetriever,
+});
+```
+
+You can use the command below to test this endpoint.
+
+```bash copy
+curl -X POST "http://127.0.0.1:3400/chat-rag-inventory" -H "Content-Type: application/json" -d '{"data": { "query": "What is the price of Seagate ST1000DX002?" } }'
+```
+
+### Genkit Developer UI
+
+You could also start the Genkit Developer UI to test above:
+
+```bash copy
+npx genkit start
+```
+
+Endpoint to test: `chat-rag-inventory`
+
+## RAG Chat with History
+
+RAG chat with chat history support. Chat restricted to queries related to the provided topic. Uses RAG to answer user queries by retrieving additional context information (e.g. from a text or JSON file).
+
+### Expected Input Schema
+
+Request body data:
+
+- `query`: User query to chat agent.
+- `chatId`: Optional chat ID to continue the chat history. If not provided, a new chat history will be created, and the chat ID for this chat history will be returned with the response. This chat ID can be sent in further requests to continue a specific conversation. If the provided chat ID is not valid or not found, as error is returned.
+
+  ```json
+  {
+    "data": {
+      "query": "string",
+      "chatId": "string"
+    },
+    "required": ["query"]
+  }
+  ```
+
+### Output Schema
+
+For successful requests, the response will contain:
+
+- `response`: Chat agent response to the user query, returned as a string by default. (You may add more endpoints or update existing ones under `src/endpoints`)
+- `chatId`: Chat ID for the current chat history. This can be used to continue the chat history in further requests.
+
+  ```json
+  {
+    "result": {
+      "response": "string",
+      "chatId": "string"
+    }
+  }
+  ```
+
+For failed requests, the response will contain:
+
+- `error`: Error message returned by the server.
+
+  ```json
+  {
+    "error": "string"
+  }
+  ```
+
+### Usage
+
+Below example hows how you can define a RAG chat endpoint that supports chat history. The example defined below uses in-memory stores for chat history, but you can easily provide your own store when configuring the endpoint.
+
+Below RAG agent answers user queries related to 'Store Inventory Data'. We'll index this data, store it in a vector store, and use a vector store retriever to retrieve the data when answering user queries.
+
+```typescript copy
+import { getDataRetriever } from "qvikchat/data-retrievers";
+
+// Index inventory data and get retriever
+const inventoryDataRetriever = await getDataRetriever({
+  dataType: "csv",
+  filePath: "rag/knowledge-base/test-data/inventory-data.csv",
+  generateEmbeddings: true,
+});
+
+// Inventory Data chat endpoint with support for RAG and chat history
+defineChatEndpoint({
+  endpoint: "chat-rag-history-inventory",
+  enableRAG: true,
+  retriever: inventoryDataRetriever,
+  enableChatHistory: true,
+  chatHistoryStore: new InMemoryChatHistoryStore(),
+});
+```
+
+You can use the commands below to test this endpoint.
+
+On running the first example, you should receive an object as a response with the chat ID for the chat history. Add this chat ID to the second example to continue the chat history.
+
+```bash copy
+curl -X POST "http://127.0.0.1:3400/chat-rag-history-inventory" -H "Content-Type: application/json" -d '{"data": { "query": "What is the price of Seagate ST1000DX002?" } }'
+
+curl -X POST "http://127.0.0.1:3400/chat-rag-history-inventory" -H "Content-Type: application/json" -d '{"data": { "query": "Could you also let me know about its capacity?", "chatId": "<enter chat id here>" } }'
+```
+
+### Genkit Developer UI
+
+You could also start the Genkit Developer UI to test above:
+
+```bash copy
+npx genkit start
+```
+
+Endpoint to test: `chat-rag-history-inventory`
+
+## RAG Chat with History, Caching, and Authentication
+
+RAG chat with chat history support, response caching, and API key authentication. Chat restricted to queries related to the provided topic. Uses RAG to answer user queries by retrieving additional context information (e.g. from a text or JSON file).
+
+### Expected Input Schema
+
+Request header requires an API key for authentication:
+
+- `key`: API key for authentication. The API key must be owned by the user making the request, and should have authorization to access the endpoint endpoint.
+
+Request body data:
+
+- `query`: User query to chat agent.
+- `uid`: User ID of the user making the query. Required to assess if user is authorized to access the endpoint endpoint. The API key provided in headers must be owned by this user.
+- `chatId`: Optional chat ID to continue the chat history. If not provided, a new chat history will be created, and the chat ID for this chat history will be returned with the response. This chat ID can be sent in further requests to continue a specific conversation. If the provided chat ID is not valid or not found, as error is returned.
+
+  ```json
+  {
+    "data": {
+      "query": "string",
+      "uid": "string",
+      "chatId": "string"
+    },
+    "required": ["query", "uid"]
+  }
+  ```
+
+### Output Schema
+
+For successful requests, the response will contain:
+
+- `response`: Chat agent response to the user query, returned as a string by default. (You may add more endpoints or update existing ones under `src/endpoints`)
+- `chatId`: Chat ID for the current chat history. This can be used to continue the chat history in further requests.
+
+  ```json
+  {
+    "result": {
+      "response": "string",
+      "chatId": "string"
+    }
+  }
+  ```
+
+For failed requests, the response will contain:
+
+- `error`: Error message returned by the server.
+
+  ```json
+  {
+    "error": "string"
+  }
+  ```
+
+### Usage
+
+Below example shows how you can define a RAG chat endpoint that supports chat history, response caching, and API key authentication. The example defined below uses in-memory stores for chat history, caching and API key store, but you can easily provide your own stores when configuring the endpoint.
+
+Below example uses a RAG agent to answer user queries related to 'Store Inventory Data'. We'll index this data, store it in a vector store, and use a vector store retriever to retrieve the data when answering user queries.
+
+```typescript copy
+import { getDataRetriever } from "qvikchat/data-retrievers";
+
+// Index inventory data and get retriever
+const inventoryDataRetriever = await getDataRetriever({
+  dataType: "csv",
+  filePath: "rag/knowledge-base/test-data/inventory-data.csv",
+  generateEmbeddings: true,
+});
+
+// Inventory Data chat endpoint with support for RAG, chat history, cache and auth
+defineChatEndpoint({
+  endpoint: "chat-rag-history-auth-cached-inventory",
+  enableChatHistory: true,
+  chatHistoryStore: new InMemoryChatHistoryStore(),
+  enableAuth: true,
+  apiKeyStore: new InMemoryAPIKeyStore(),
+  enableCache: true,
+  cacheStore: new InMemoryCacheStore(),
+  enableRAG: true,
+  retriever: inventoryDataRetriever,
+});
+```
+
+You can use the commands below to test this endpoint.
+
+On running the first example, you should receive an object as a response with the chat ID for the chat history. Add this chat ID to the second example to continue the chat history.
+
+```bash copy
+curl -X POST "http://127.0.0.1:3400/chat-rag-history-auth-cached-inventory" -H "Content-Type: application/json" -H "Authorization: YOUR_API_KEY" -d '{"data": { "query": "What is the price of Seagate ST1000DX002?" } }'
+
+curl -X POST "http://127.0.0.1:3400/chat-rag-history-auth-cached-inventory" -H "Content-Type: application/json" -H "Authorization: YOUR_API_KEY" -d '{"data": { "query": "Could you also let me know about its capacity?", "chatId": "<enter chat id here>" } }'
+```
+
+### Genkit Developer UI
+
+You could also start the Genkit Developer UI to test above:
+
+```bash copy
+npx genkit start
+```
+
+Endpoint to test: `chat-rag-history-auth-cached-inventory`
+
+## Configurations
+
+As you can see from above, its quite easy to turn features on and off. For all chat endpoint configurations, please check [Chat Endpoint Configurations](/chat-endpoints/chat-flow-configurations).
