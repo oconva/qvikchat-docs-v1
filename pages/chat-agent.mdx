@@ -95,7 +95,7 @@ const chatAgent = new ChatAgent({
 
 ## All Chat Agent Configurations
 
-```typescript copy
+```typescript
 /**
  * Represents the type of chat agent.
  */
@@ -122,8 +122,6 @@ export type AgentTypeConfig =
  * @property topic - The topic for the chat agent.
  * @property systemPrompt - The system prompt for the chat agent.
  * @property chatPrompt - The chat prompt for the chat agent.
- * @property enableChatHistory - Indicates whether to use chat history.
- * @property chatHistoryStore - The chat history store.
  * @property tools - Tools for the chat agent.
  * @property model - The supported model to use for chat completion.
  * @property modelConfig - The model configuration.
@@ -131,23 +129,25 @@ export type AgentTypeConfig =
 export type ChatAgentConfig = {
   systemPrompt?: Dotprompt;
   chatPrompt?: Dotprompt;
-  enableChatHistory?: boolean;
-  chatHistoryStore?: ChatHistoryStore;
   tools?: ToolArgument[];
   model?: SupportedModels;
   modelConfig?: ModelConfig;
 } & AgentTypeConfig;
+
+type DefaultChatAgentConfigType = {
+  agentType: ChatAgentType;
+  model: SupportedModels;
+};
 ```
 
 ## Default Chat Agent Configuration
 
-```typescript copy
+```typescript
 /**
  * Represents the default chat agent configuration.
  */
-export const defaultChatAgentConfig: ChatAgentConfig = {
+export const defaultChatAgentConfig: DefaultChatAgentConfigType = {
   agentType: "open-ended",
-  useChatHistory: false,
   model: "gemini15Flash",
 };
 ```
@@ -180,6 +180,8 @@ Depending on your use case, you can provide additional parameters when generatin
  * @property context - The context object.
  * @property chatId - The ID of the chat history.
  * @property history - The chat history.
+ * @property enableChatHistory - Indicates whether to use chat history.
+ * @property chatHistoryStore - The chat history store.
  * @property tools - The tool arguments.
  * @property model - The supported model.
  * @property modelConfig - The model configuration.
@@ -188,13 +190,26 @@ Depending on your use case, you can provide additional parameters when generatin
  */
 export type GenerateResponseProps = {
   query: string;
-  context?: any;
+  context?: string;
   chatId?: string;
-  history?: MessageData[];
   tools?: ToolArgument[];
   model?: SupportedModels;
   modelConfig?: ModelConfig;
   systemPrompt?: Dotprompt;
   chatPrompt?: Dotprompt;
-};
+} & GenerateResponseHistoryProps;
+
+/**
+ * Represents the properties for generating a response with chat history.
+ */
+export type GenerateResponseHistoryProps =
+  | {
+      enableChatHistory: true;
+      chatId?: string;
+      history?: MessageData[];
+      chatHistoryStore: ChatHistoryStore;
+    }
+  | {
+      enableChatHistory?: false;
+    };
 ```

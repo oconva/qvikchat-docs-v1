@@ -12,7 +12,7 @@ First time that a conversation query is sent to a chat endpoint (that has chat h
 
 ## Chat History Store
 
-You can provide an instance of a chat history store when setting up an instance of the `ChatAgent` class. All you have to ensure is that the chat history store instance you provide implements the `ChatHistoryStore` interface.
+You can provide an instance of any chat history store to the `defineChatEndpoint` function. If using a custom chat history store, all you have to ensure is that the chat history store instance you provide implements the `ChatHistoryStore` interface.
 
 ```typescript copy
 import { ChatHistoryStore } from 'qvikchat/history';
@@ -22,33 +22,56 @@ export class CustomChatHistoryStore implements ChatHistoryStore {
 }
 ```
 
-The `ChatHistoryStore` interface is defined as follows.
+Below code gives an idea of how the `ChatHistoryStore` interface is defined. Actual implementation may vary depending on the version of QvikChat you're using.
 
 ```typescript copy
 /**
  * Represents a store for managing chat history.
- *
- * @interface ChatHistoryStore
- *
- * @property {ChatHistoryCollection | CollectionReference} history - The collection of chat history records.
- * @property {(messages?: MessageData[]) => Promise<string>} addChatHistory - Adds a new chat history to the store.
- * @property {(chatId: string, messages: MessageData[]) => Promise<boolean> | Promise<void>} updateChatHistory - Updates an existing chat history in the store.
- * @property {(chatId: string, messages: MessageData[]) => Promise<boolean> | Promise<void>} addMessages - Adds messages to an existing chat history in the store.
- * @property {(chatId: string) => Promise<MessageData[] | undefined>} getChatHistory - Retrieves chat history from the store.
- * @property {(chatId: string) => Promise<boolean> | Promise<void>} deleteChatHistory - Deletes chat history from the store.
  */
 export interface ChatHistoryStore {
+  /**
+   * The collection of chat history records.
+   */
   history: ChatHistoryCollection | CollectionReference;
+  /**
+   * Add new chat history to the store. Returns chat ID of the new chat history.
+   * @param messages add new chat history to the store
+   * @returns chat ID of the new chat history
+   */
   addChatHistory: (messages?: MessageData[]) => Promise<string>;
+  /**
+   * Update existing chat history in the store. Overwrites existing messages with new messages.
+   * @param chatId ID of the chat history to update
+   * @param messages messages to add to the chat history
+   * @throws Error if unable to update chat history
+   */
   updateChatHistory: (
     chatId: string,
     messages: MessageData[]
   ) => Promise<boolean> | Promise<void>;
+  /**
+   * Add messages to an existing chat history in the store.
+   * @param chatId ID of the chat history to update
+   * @param messages messages to add to the chat history
+   * @throws Error if unable to add messages to chat history
+   */
   addMessages: (
     chatId: string,
     messages: MessageData[]
   ) => Promise<boolean> | Promise<void>;
-  getChatHistory: (chatId: string) => Promise<MessageData[] | undefined>;
+  /**
+   * Get chat history from the store for the specified chat ID.
+   * @param chatId Chat ID for the chat history to retrieve
+   * @returns Array of messages pretaining to the chat history
+   * @throws Error if unable to retrieve chat history
+   */
+  getChatHistory: (chatId: string) => Promise<MessageData[]>;
+  /**
+   * Delete chat history from the store for the specified chat ID.
+   * @param chatId Chat ID for the chat history to delete
+   * @throws Error if unable to delete chat history
+   * @returns Promise that resolves when chat history is deleted
+   */
   deleteChatHistory: (chatId: string) => Promise<boolean> | Promise<void>;
 }
 ```
@@ -62,19 +85,18 @@ export interface ChatHistoryStore {
 - `getChatHistory`: Retrieves the chat history for a given chat ID.
 - `deleteChatHistory`: Deletes the chat history for a given chat ID.
 
-By default, the QvikChat uses an in-memory chat history store (`qvikchat/history`). This store is used to store chat histories for the chat agents that support chat history. You can replace this in-memory store with a cloud-based database of your choice (e.g. Firestore) by implementing the `ChatHistoryStore` interface (`qvikchat/history`).
+## Providing Chat History Store to Chat Endpoint
 
-## Providing Chat History Store to Chat Agent
-
-You can provide an instance of a chat history store when setting up an instance of the `ChatAgent` class. The chat agent will use this store to manage chat histories.
+You can provide an instance of a chat history store to the `defineChatEndpoint` function. The chat endpoint will use this store to manage chat histories.
 
 ```typescript copy
-import { ChatAgent } from "qvikchat/agents";
+import { InMemoryChatHistoryStore } from "qvikchat/history";
 
-// Chat agent with custom chat history store
-const chatAgent = new ChatAgent({
+// Open-ended chat endpoint with support for chat history
+defineChatEndpoint({
+  endpoint: "chat-open-history",
   enableChatHistory: true,
-  chatHistoryStore: new CustomChatHistoryStore(),
+  chatHistoryStore: new InMemoryChatHistoryStore(),
 });
 ```
 
@@ -83,15 +105,15 @@ const chatAgent = new ChatAgent({
 You can use Firebase Firestore as a chat history store. Remember to initialize the Firebase app before using it. To learn more about initializing the Firebase app, check [Initialize Firebase App](/integrations/firebase#initialize-firebase-app)
 
 ```typescript copy
-import { ChatAgent } from "qvikchat/agents";
 import { getFirebaseApp } from "qvikchat/firebase";
-import { FirestoreChatHistoryStore } from "qvikchat/history/firestore-chat-history-store";
+import { FirestoreChatHistoryStore } from "qvikchat/history";
 
 // Initialize Firebase App
 const firebaseApp = getFirebaseApp();
 
-// Chat agent with Firestore chat history store
-const chatAgent = new ChatAgent({
+// Open-ended chat endpoint using Firestore chat history store
+defineChatEndpoint({
+  endpoint: "chat-open-history",
   enableChatHistory: true,
   chatHistoryStore: new FirestoreChatHistoryStore({
     firebaseApp: firebaseApp,
@@ -99,5 +121,3 @@ const chatAgent = new ChatAgent({
   }),
 });
 ```
-
-If you don't provide a chat history store instance, the chat agent will use the default in-memory chat history store.
