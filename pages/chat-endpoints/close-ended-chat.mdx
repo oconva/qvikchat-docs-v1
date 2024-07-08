@@ -66,9 +66,9 @@ Can use commands below to test this endpoint.
 For the first example, ideally, you should get a response that the model can't answer the question since it's not related to the specified topic, establishing that the chat agent is working as expected. It should, however, generate a proper answer for the second example.
 
 ```bash copy
-curl -X POST "http://127.0.0.1:3400/chat-close" -H "Content-Type: application/json"  -d '{"data": "Can you help me with my calculus assignment?" }'
+curl -X POST "http://127.0.0.1:3400/chat-close" -H "Content-Type: application/json"  -d '{"data": { "query" : "Can you help me with my calculus assignment?" } }'
 
-curl -X POST "http://127.0.0.1:3400/chat-close" -H "Content-Type: application/json"  -d '{"data": "What is App check?" }'
+curl -X POST "http://127.0.0.1:3400/chat-close" -H "Content-Type: application/json"  -d '{"data": { "query" : "What is App check?" } }'
 ```
 
 #### Genkit Developer UI

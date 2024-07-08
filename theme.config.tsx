@@ -8,13 +8,13 @@ const config: DocsThemeConfig = {
   logo: <QvikChatLogo />,
   logoLink: "/",
   project: {
-    link: "https://github.com/oconva/qvikchat",
+    link: "https://github.com/oconva/qvikchat-docs",
   },
   chat: {
     icon: <SponsorNavBtn variant="outline"></SponsorNavBtn>,
     link: "https://github.com/sponsors/oconva",
   },
-  docsRepositoryBase: "https://github.com/oconva/qvikchat",
+  docsRepositoryBase: "https://github.com/oconva/qvikchat-docs",
   footer: {
     text: "QvikChat - A project by Oconva",
     component: <Footer />,
