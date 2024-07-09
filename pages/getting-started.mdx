@@ -88,12 +88,21 @@ Simply, clone the [QvikChat starter template](https://github.com/oconva/qvikchat
 git clone https://github.com/oconva/qvikchat-starter-template.git
 ```
 
-Once you have cloned the starter template, you can run the following commands to get started:
+Once you have cloned the starter template, add the API keys required to access LLM models. By default, QvikChat uses Google's Gemini API for text generation and embedding models. If you don't yet have a Google Gen AI API key, you can get one from [Gemini API - Get an API Key](https://ai.google.dev/gemini-api/docs/api-key).
 
-```bash copy
-cd qvikchat-starter-template
+`.env` should have:
+
+```bash
+GOOGLE_GENAI_API_KEY=
+```
+
+You can also use OpenAI API instead of Gemini API. You'll have to provide your OpenAI API key as the `OPENAI_API_KEY` environment variable and configure your chat endpoints to use a custom chat agent configured with the OpenAI model you want to use. To learn more about configuring chat agents with custom LLM model, check [here](https://qvikchat.pkural.ca/chat-agent#llm-model).
+
+You can run the following commands to install the dependencies and start the server:
+
+```bash
 npm install # or pnpm install
-npm run start # or pnpm start
+npm run dev # or pnpm dev
 ```
 
 To build the project, run:

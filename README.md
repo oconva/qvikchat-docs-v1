@@ -33,3 +33,7 @@ This project is licensed under the MIT License.
 ## Credits
 
 This documentation website was created using [Nextra](https://github.com/shuding/nextra) site generation framework.
+
+## Oconva
+
+QvikChat is a project by [Oconva](https://github.com/oconva). Oconva is an initiative to make conversational AI more open and accessible to all. Oconva's vision is to create a future where any developer, regardless of their available resources, can empower their apps with the power of conversational AI. Whether it's adding an AI assistant to their app or integrating a translation service, Oconva aims to provide developers with open-source tools and frameworks to support them on this journey.
