@@ -28,7 +28,40 @@ When creating a RAG enabled chat endpoint in QvikChat, we can easily perform bot
 
 Let's take a look at an example below.
 
-A RAG chat endpoint will require a data retriever that is can use to retriever context information when a user send a query, so lets create a retriever first.
+A RAG chat endpoint will require a data retriever. You can either call the `getDataRetriever` method to get a retriever and pass this retriever instance as `retriever` to the chat endpoint, or you may use the `retrieverConfig` property of the chat endpoint to provide configurations for the retriever.
+
+**Data Retriever Config**
+
+Instead of creating a data retriever separately, you can also provide the data retriever configuration directly in the chat endpoint configuration.
+
+```typescript copy
+// Inventory Data chat endpoint with support for chat history, authentication, caching and RAG
+defineChatEndpoint({
+  chatAgent: new ChatAgent({
+    agentTypeConfig: {
+      agentType: "rag",
+      topic: "Store Inventory Data",
+    },
+    useChatHistory: true,
+  }),
+  endpoint: "rag-chat-inventory",
+  enableChatHistory: true,
+  enableAuth: true,
+  apiKeyStore,
+  enableCache: true,
+  cacheStore,
+  enableRAG: true,
+  retrieverConfig: {
+    dataType: "csv",
+    filePath: "rag/knowledge-bases/inventory-data.csv",
+    generateEmbeddings: true,
+  },
+});
+```
+
+**Data Retriever Instance**
+
+If you want to create a data retriever separately, you can call the `getDataRetriever` method to get a retriever instance and pass this retriever instance as `retriever` to the chat endpoint. This method enables you to share the same retriever instance across multiple chat endpoints. If you are generating embeddings for data, then this would be the recommended approach, because you can generate embeddings once and share the retriever instance across multiple chat endpoints.
 
 ```typescript copy
 // Index inventory data and get retriever

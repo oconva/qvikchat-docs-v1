@@ -2,7 +2,43 @@ import { Notice } from "../components/notice";
 
 # Chat Agent
 
-Chat Agent class provides the methods required to interact with the LLM model and generate responses to user queries. The class provides methods to generate responses and configure chat history.
+Chat Agent class provides the methods required to interact with the LLM model and generate responses to user queries. Each chat agent instance can be configured to use specific LLM model, system prompt, chat prompt, tools and more.
+
+Behind the scenes, each chat endpoint uses an instance of `ChatAgent` to process user queries and generate responses. However, you don't have to create a chat agent instance manually when defining a chat endpoint. Instead, you can provide the chat agent configuration directly in the chat endpoint configuration.
+
+## Endpoint Chat Agent Config
+
+When defining a new endpoint, you can configure which LLM model to use, the system prompt, chat prompt, tools and more, using the `chatAgentConfig` property.
+
+```typescript copy
+import { defineChatEndpoint } from "@oconva/qvikchat/endpoints";
+
+// Define a chat endpoint with a specific chat agent configurations
+defineChatEndpoint({
+  endpoint: "chat",
+  topic: "inventory data",
+  chatAgentConfig: {
+    model: "gemini15Pro",
+    modelConfig: {
+      version: "latest",
+      temperature: 0.5,
+      maxOutputTokens: 2048,
+      safetySettings: [
+        {
+          category: "HARM_CATEGORY_DANGEROUS_CONTENT",
+          threshold: "BLOCK_LOW_AND_ABOVE",
+        },
+      ],
+    },
+  },
+});
+```
+
+## Chat Agent Class
+
+The `ChatAgent` class provides the methods required to interact with the LLM model and generate responses to user queries. You may, if you want to, use the chat agent class directly to generate responses to user queries.
+
+Below documentation provides an overview of the `ChatAgent` class and its methods, but this knowledge is not required to define a chat endpoint.
 
 ## Types of Chat Agents
 

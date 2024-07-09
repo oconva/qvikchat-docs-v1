@@ -44,3 +44,34 @@ const inventoryDataRetriever = await getDataRetriever({
   },
 });
 ```
+
+## Endpoint Retriever Config
+
+Instead of creating a data retriever separately, you can also provide the data retriever configuration directly in the chat endpoint configuration. Data retriever will be created using the provided configuration when the chat endpoint is initialized.
+
+Be mindful though that when sharing the same retriever configurations (for example, same data) and the `generateEmbeddings` flag is set to `true`, the data will be loaded and embeddings will be generated each time any chat endpoint using that retriever configuration is initialized. So, if you have multiple chat endpoints that will be sharing the same retriever config and you are generating embeddings for the data, it is recommended to create a retriever instance separately and share it across multiple chat endpoints as the `retriever` instance.
+
+```typescript copy
+// Inventory Data chat endpoint with support for chat history, authentication, caching and RAG
+defineChatEndpoint({
+  chatAgent: new ChatAgent({
+    agentTypeConfig: {
+      agentType: "rag",
+      topic: "Store Inventory Data",
+    },
+    useChatHistory: true,
+  }),
+  endpoint: "rag-chat-inventory",
+  enableChatHistory: true,
+  enableAuth: true,
+  apiKeyStore,
+  enableCache: true,
+  cacheStore,
+  enableRAG: true,
+  retrieverConfig: {
+    dataType: "csv",
+    filePath: "rag/knowledge-bases/inventory-data.csv",
+    generateEmbeddings: true,
+  },
+});
+```

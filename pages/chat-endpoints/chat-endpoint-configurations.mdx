@@ -68,7 +68,15 @@ defineChatEndpoint({
   chatAgentConfig: {
     model: "gemini15Pro",
     modelConfig: {
-      temperature: 0.9,
+      version: "latest",
+      temperature: 0.5,
+      maxOutputTokens: 2048,
+      safetySettings: [
+        {
+          category: "HARM_CATEGORY_DANGEROUS_CONTENT",
+          threshold: "BLOCK_LOW_AND_ABOVE",
+        },
+      ],
     },
   },
   enableAuth: true,
