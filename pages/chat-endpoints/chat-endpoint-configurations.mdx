@@ -8,54 +8,101 @@ import { defineChatEndpoint } from "@oconva/qvikchat/endpoints";
 
 Below are some of the chat endpoint configurations you can define.
 
+- `chatAgentConfig`: Configurations for the chat agent, like LLM model, system prompt, chat prompt, and tools.
+- `endpoint`: Server endpoint to which queries should be sent to run this chat flow.
+
+**Close-ended Chat Configurations**
+
+- `agentType`: Type of chat agent to use for this endpoint. Can set it to "close-ended" to create a close-ended chat endpoint. By default, it is set to "open-ended".
+- `topic`: Topic for close-ended chat agent. Required if RAG is enabled. Queries are restricted to be relevant to the given topic so to prevent unintended use.
+
+**Chat History Configurations**
+
+- `enableChatHistory`: Enable chat history for this endpoint. If chat ID is provided, chat history will be fetched and used to generate response. If no chat ID is provided, a new chat ID will be generated to store chat history, and will be returned in the response.
+- `chatHistoryStore`: Chat History Store instance to use for this endpoint.
+
+**Auth Configurations**
+
+- `enableAuth`: Enable authentication for this endpoint. Must provide an API Key Store instance if set to true.
+- `apiKeyStore`: API Key Store instance to use for this endpoint.
+
+**Cache Configurations**
+
+- `enableCache`: Enable caching for this endpoint. Must provide a Cache Store instance if set to true.
+- `cacheStore`: Cache Store instance to use for this endpoint.
+
+**RAG Configurations**
+
+- `topic`: Topic for RAG chat agent. Required if RAG is enabled. Queries are restricted to be relevant to the given topic so to prevent unintended use.
+- `enableRAG`: Enable RAG (Retrieval Augmented Generation) functionality for this endpoint. Must provide a retriever method if set to true.
+- `retriever`: Method to retrieve documents for RAG. Can be obtained from the `getDataRetriever` method.
+- `retrieverConfig`: Configuration for the RAG retriever, for example, number of documents to retrieve, algorithm to use, etc.
+
+## Example
+
+Below is an example of a comprehensively configured chat endpoint. You don't need to provide all the configurations, only the ones you need. Below example is only for demonstration purposes.
+
 ```typescript copy
-/**
- * Represents the parameters for defining a chat endpoint.
- */
-export interface DefineChatEndpointParams {
-  /**
-   * The chat agent used for the endpoint.
-   */
-  chatAgent: ChatAgent;
+import { FirestoreAPIKeyStore } from "@oconva/qvikchat/auth";
+import { FirestoreCacheStore } from "@oconva/qvikchat/cache";
+import { getEmbeddingModel } from "@oconva/qvikchat/data-embeddings";
+import { TaskType } from "@oconva/qvikchat/data-retrievers";
+import { defineChatEndpoint } from "@oconva/qvikchat/endpoints";
+import { FirestoreChatHistoryStore } from "@oconva/qvikchat/history";
+import { credential, getFirebaseApp } from "@oconva/qvikchat/firebase";
 
-  /**
-   * The endpoint for the chat endpoint.
-   */
-  endpoint: string;
+// Initialize Firebase app
+const firebaseApp = getFirebaseApp({
+  credential: credential.cert(
+    process.env.GOOGLE_APPLICATION_CREDENTIALS as string
+  ),
+});
 
-  /**
-   * Optional flag to enable chat history.
-   */
-  enableChatHistory?: boolean;
-
-  /**
-   * Optional flag to enable authentication.
-   */
-  enableAuth?: boolean;
-
-  /**
-   * Optional API key store.
-   */
-  apiKeyStore?: APIKeyStore;
-
-  /**
-   * Optional flag to enable caching.
-   */
-  enableCache?: boolean;
-
-  /**
-   * Optional cache store.
-   */
-  cacheStore?: CacheStore;
-
-  /**
-   * Optional flag to enable RAG (Retrieve, Answer, Generate) functionality.
-   */
-  enableRAG?: boolean;
-
-  /**
-   * Optional method to retrieve documents for RAG.
-   */
-  retriever?: TextDataRetriever;
-}
+// Define chat endpoint with RAG, chat history, cache and auth
+// uses Firestore API key store, Firestore chat history store, Firestore cache store
+// uses Gemini 15 Pro model for chat and embedding-001 embedding model
+// uses custom retrieval strategy for RAG
+defineChatEndpoint({
+  endpoint: "chat",
+  topic: "inventory data",
+  chatAgentConfig: {
+    model: "gemini15Pro",
+    modelConfig: {
+      temperature: 0.9,
+    },
+  },
+  enableAuth: true,
+  apiKeyStore: new FirestoreAPIKeyStore({
+    firebaseApp: firebaseApp,
+    collectionName: "api-keys",
+  }),
+  enableChatHistory: true,
+  chatHistoryStore: new FirestoreChatHistoryStore({
+    firebaseApp: firebaseApp,
+    collectionName: "chat-history",
+  }),
+  enableCache: true,
+  cacheStore: new FirestoreCacheStore({
+    firebaseApp: firebaseApp,
+    collectionName: "cache",
+  }),
+  enableRAG: true,
+  retrieverConfig: {
+    dataType: "csv",
+    filePath: "data/inventory.csv",
+    csvLoaderOptions: {
+      column: "products",
+      separator: ",",
+    },
+    generateEmbeddings: true,
+    retrievalOptions: {
+      k: 10,
+      searchType: "mmr",
+    },
+    embeddingModel: getEmbeddingModel({
+      modelName: "embedding-001",
+      taskType: TaskType.RETRIEVAL_DOCUMENT,
+    }),
+  },
+});
 ```

@@ -2,7 +2,9 @@
   "index": "Introduction",
   "getting-started": "Getting Started",
   "chat-endpoints": "Chat Endpoints",
-  "chat-agent": "Chat Agent",
+  "chat-agent": {
+    "display": "hidden"
+  },
   "chat-history": "Chat History",
   "prompts": "Prompts",
   "rag-guide": "RAG Guide",

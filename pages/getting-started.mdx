@@ -18,6 +18,22 @@ Or
 pnpm add @oconva/qvikchat
 ```
 
+## Setup Environment Variables
+
+Create a `.env` file in the root of the project and add the following environment variables:
+
+```env copy
+GOOGLE_GENAI_API_KEY=
+OPENAI_API_KEY=
+GOOGLE_APPLICATION_CREDENTIALS=
+```
+
+Alternatively, you can copy the `.env.tmp` file or rename it to `.env` and fill in the values.
+
+By default QvikChat uses the Google GenAI, so to use QvikChat with default settings, you need to provide the `GOOGLE_GENAI_API_KEY`. You don't have to set values for other environment variables if you are using the default settings.
+
+Add value to the `OPENAI_API_KEY` variable if you're going to use OpenAI models and to the `GOOGLE_APPLICATION_CREDENTIALS` variable if you're going to use Firebase Firestore.
+
 ## Usage
 
 Before you can deploy your chat endpoints, you need to setup Firebase Genkit, either by using the default configurations or by providing your own configurations, these may include additional Genkit plugins you may want to enable (e.g. to add support for a new language model). When starting out, we recommend using the default configurations.

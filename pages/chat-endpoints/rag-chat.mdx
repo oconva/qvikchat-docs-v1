@@ -77,6 +77,7 @@ const inventoryDataRetriever = await getDataRetriever({
 // Inventory Data chat endpoint with support for RAG
 defineChatEndpoint({
   endpoint: "chat-rag-inventory",
+  topic: "inventory data",
   enableRAG: true,
   retriever: inventoryDataRetriever,
 });
@@ -164,6 +165,7 @@ const inventoryDataRetriever = await getDataRetriever({
 // Inventory Data chat endpoint with support for RAG and chat history
 defineChatEndpoint({
   endpoint: "chat-rag-history-inventory",
+  topic: "inventory data",
   enableRAG: true,
   retriever: inventoryDataRetriever,
   enableChatHistory: true,
@@ -263,6 +265,7 @@ const inventoryDataRetriever = await getDataRetriever({
 // Inventory Data chat endpoint with support for RAG, chat history, cache and auth
 defineChatEndpoint({
   endpoint: "chat-rag-history-auth-cached-inventory",
+  topic: "inventory data",
   enableChatHistory: true,
   chatHistoryStore: new InMemoryChatHistoryStore(),
   enableAuth: true,
