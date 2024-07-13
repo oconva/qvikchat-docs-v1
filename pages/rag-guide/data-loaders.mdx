@@ -47,26 +47,6 @@ defineChatEndpoint({
 
 ## Data Loading Options
 
-Below are the properties that can be used to configure the retriever for loading data:
-
-**Required properties**
-
-- `filePath`: The path to the file to load the data from.
-
-**Optional properties**
-
-- `dataType`: The type of data to load. This helps ascertain the best splitting strategy. If not specified, the data type is inferred from the file extension.
-- `docs`: An array of `Document` objects containing the data to load. This is useful when you want to load data from a source not supported by QvikChat by default. You can use any [LangChain-supported data loader](https://js.langchain.com/v0.2/docs/integrations/document_loaders) to load the data and provide the documents as the `docs` property.
-- `splitDocs`: An array containing documents that have been processed through a data splitter. This is useful when you want to load data from a source not supported by QvikChat by default. You can use any [LangChain-supported text splitter](https://js.langchain.com/v0.2/docs/how_to/#text-splitters) to split the data and provide the split documents as the `splitDocs` property. If providing `splitDocs`, you do not need to provide `docs`.
-- `jsonLoaderKeysToInclude`: An object containing the keys to include when loading JSON data. This is useful when you want to load only specific keys from the JSON data.
-- `csvLoaderOptions`: An object containing options to specify when loading CSV data. This is useful when you want to specify the delimiter and other options when loading CSV data.
-- `pdfLoaderOptions`: An object containing options to specify when loading PDF data. This is useful when you want to specify additional options when loading PDF data.
-- `dataSplitterType`: Use this to specify a specific text splitter you want to use. If not specified, the default text splitter is used based on the data type.
-- `chunkingConfig`: An object containing the data chunking configuration. This is useful when you want to specify the data chunking configuration.
-- `splitterConfig`: An object containing the data splitter configuration. Use this to specify or override data splitting strategy.
-- `vectorStore`: A vector store instance to use for retrieving relevant context data for a given query. When `generateEmbeddings` is set to `true`, the generated embeddings are stored in the vector store. If using a hosted vector store, you can provide the instance to the `vectorStore` property. To learn more, check out the [Vector Store](/rag-guide/vector-stores) page.
-- `embeddingModel`: An embedding model instance to use for generating embeddings for the data. When `generateEmbeddings` is set to `true`, the embeddings are generated using the provided embedding model. If you want to use a specific embedding model, you can provide the instance to the `embeddingModel` property. By default, QvikChat will use either Gemini API or OpenAI for embedding model, depending on how you have configured the project. To learn more, check out the [Embedding Models](/rag-guide/embedding-models) page.
-- `generateEmbeddings`: A boolean value to specify whether to generate embeddings for the data. If set to `true`, embeddings are generated for the data. If set to `false`, embeddings are not generated for the data, only the retriever instance is returned.
-- `retrievalOptions`: Use this to configure the data retrieval strategy. Check out the [Data Retrieval](/rag-guide/data-retrieval) page for more information.
+You can specify data loading options through the retriever configurations object when called the `getDataRetriever` method or the when specifying the `retrieverConfig` property in the chat endpoint configuration. For more information, check [Retriever Config](/data-retrieval#retriever-config).
 
 ## Loading Custom Data

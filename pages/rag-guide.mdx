@@ -48,7 +48,6 @@ defineChatEndpoint({
   enableRAG: true,
   topic: "Store Inventory Data", // topic of data for which RAG is enabled
   retrieverConfig: {
-    dataType: "csv",
     filePath: "rag/knowledge-bases/inventory-data.csv",
     generateEmbeddings: true,
   },
@@ -64,7 +63,6 @@ If you want to create a data retriever separately, you can call the `getDataRetr
 ```typescript copy
 // Index inventory data and get retriever
 const inventoryDataRetriever = await getDataRetriever({
-  dataType: "csv",
   filePath: "rag/knowledge-bases/inventory-data.csv",
   generateEmbeddings: true,
 });

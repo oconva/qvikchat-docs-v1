@@ -13,7 +13,6 @@ import { FaissStore } from "@langchain/community/vectorstores/faiss";
 
 // Index data and get retriever
 const dataRetriever = await getDataRetriever({
-  dataType: "csv",
   filePath: "test.csv",
   generateEmbeddings: true,
   vectorStore: new FaissStore(getEmbeddingModel(), {
