@@ -19,6 +19,9 @@ const config: DocsThemeConfig = {
     text: "QvikChat - A project by Oconva",
     component: <Footer />,
   },
+  sidebar: {
+    defaultMenuCollapseLevel: 1,
+  },
   useNextSeoProps: () => {
     return {
       titleTemplate: "%s - QvikChat",
