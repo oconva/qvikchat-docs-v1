@@ -1,3 +1,72 @@
 # Data Loaders
 
-Out of the box, QvikChat provides support for loading data from text, PDF, JSON, CSV, or a code of a supported programming language. However, if you want to load a file not supported by QvikChat by default, you can simply provide an instance of any [LangChain-supported data loader](https://js.langchain.com/v0.2/docs/integrations/document_loaders) as the `dataLoader` parameter to the `retrieverConfig` or in the configurations parameters of the `getDataRetriever` method.
+QvikChat provides built-in support for loading data from text, PDF, JSON, CSV, or a code file of a supported programming language. However, if you want to load a file not supported by QvikChat by default, you can simply use any [LangChain-supported data loader](https://js.langchain.com/v0.2/docs/integrations/document_loaders) to load the data and provide the documents as the `docs` property when configuring the retriever. Check [Loading Custom Data](#loading-custom-data) for more information.
+
+## Built-in Data Loaders
+
+QvikChat provides built-in support for loading data from the following file types:
+
+- **Text files:** Any documents containing text data, plus any code files of supported programming languages.
+- **PDF files:** Can use the `pdfLoaderOptions` to specify additional options.
+- **JSON and JSONLines files:** Can use the `jsonLoaderKeysToInclude` property to specify the keys containing relevant data.
+- **CSV files:** Can use the `csvLoaderOptions` property to specify the delimiter and other options.
+
+The type of data you are providing is inferred from the file extension given in the `filePath` value that you provide when configuring the retriever. For information on configuring the retriever, see the [Retriever Configuration](/rag-guide/data-retrieval) page.
+
+## Data Splitting
+
+Data in the given file is first loaded into processable `Document` objects, and is then split into smaller chunks using a chunking strategy. This is important for two reasons: (1) it makes it easier to index data, and (2) it makes it easier to query data. Furthermore, since most LLM models have a finite context window (or input size), having smaller chunks of data ensures relevant context information isn't lost.
+
+The chunking strategy used can have a signigicant impact on the performance of a chat service that responds to queries based on the data. However, since data comes in all shapes and sizes, it is recommended to experiment with different configurations to find the best one for your use case. There are, however, some default configurations that can be used, for example, for CSV data each row (or line) can be a chunk. If not sure, start with the default configurations and then experiment with different configurations.
+
+You can use the `chunkingConfig` property to specify the data chunking configuration when configuring the retriever. The `chunkingConfig` object can contain the following properties:
+
+- `chunkSize`: The size of each chunk in the data. The default value is 1000.
+- `overlap`: The number of tokens to overlap between chunks. The default value is 200.
+
+Here is an example of how you can specify the data chunking configuration:
+
+```typescript
+import { defineChatEndpoint } from "@oconva/qvikchat/endpoints";
+
+// endpoint with custom chunking configurations
+defineChatEndpoint({
+  endpoint: "rag",
+  enableRAG: true,
+  topic: "Test",
+  retrieverConfig: {
+    filePath: "src/data/knowledge-bases/test-data.csv",
+    generateEmbeddings: true,
+    chunkingConfig: {
+      chunkSize: 500,
+      chunkOverlap: 50,
+    },
+  },
+});
+```
+
+## Data Loading Options
+
+Below are the properties that can be used to configure the retriever for loading data:
+
+**Required properties**
+
+- `filePath`: The path to the file to load the data from.
+
+**Optional properties**
+
+- `dataType`: The type of data to load. This helps ascertain the best splitting strategy. If not specified, the data type is inferred from the file extension.
+- `docs`: An array of `Document` objects containing the data to load. This is useful when you want to load data from a source not supported by QvikChat by default. You can use any [LangChain-supported data loader](https://js.langchain.com/v0.2/docs/integrations/document_loaders) to load the data and provide the documents as the `docs` property.
+- `splitDocs`: An array containing documents that have been processed through a data splitter. This is useful when you want to load data from a source not supported by QvikChat by default. You can use any [LangChain-supported text splitter](https://js.langchain.com/v0.2/docs/how_to/#text-splitters) to split the data and provide the split documents as the `splitDocs` property. If providing `splitDocs`, you do not need to provide `docs`.
+- `jsonLoaderKeysToInclude`: An object containing the keys to include when loading JSON data. This is useful when you want to load only specific keys from the JSON data.
+- `csvLoaderOptions`: An object containing options to specify when loading CSV data. This is useful when you want to specify the delimiter and other options when loading CSV data.
+- `pdfLoaderOptions`: An object containing options to specify when loading PDF data. This is useful when you want to specify additional options when loading PDF data.
+- `dataSplitterType`: Use this to specify a specific text splitter you want to use. If not specified, the default text splitter is used based on the data type.
+- `chunkingConfig`: An object containing the data chunking configuration. This is useful when you want to specify the data chunking configuration.
+- `splitterConfig`: An object containing the data splitter configuration. Use this to specify or override data splitting strategy.
+- `vectorStore`: A vector store instance to use for retrieving relevant context data for a given query. When `generateEmbeddings` is set to `true`, the generated embeddings are stored in the vector store. If using a hosted vector store, you can provide the instance to the `vectorStore` property. To learn more, check out the [Vector Store](/rag-guide/vector-stores) page.
+- `embeddingModel`: An embedding model instance to use for generating embeddings for the data. When `generateEmbeddings` is set to `true`, the embeddings are generated using the provided embedding model. If you want to use a specific embedding model, you can provide the instance to the `embeddingModel` property. By default, QvikChat will use either Gemini API or OpenAI for embedding model, depending on how you have configured the project. To learn more, check out the [Embedding Models](/rag-guide/embedding-models) page.
+- `generateEmbeddings`: A boolean value to specify whether to generate embeddings for the data. If set to `true`, embeddings are generated for the data. If set to `false`, embeddings are not generated for the data, only the retriever instance is returned.
+- `retrievalOptions`: Use this to configure the data retrieval strategy. Check out the [Data Retrieval](/rag-guide/data-retrieval) page for more information.
+
+## Loading Custom Data
