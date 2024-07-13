@@ -1,0 +1,21 @@
+# Integrations
+
+QvikChat is built on top of [Firebase Genkit](https://firebase.google.com/docs/genkit) and [LangChain](https://js.langchain.com/v0.2/docs/integrations). This allows you to easily extend the functionality of QvikChat using any of the Genkit plugins or LangChain integrations.
+
+## [Genkit Plugins](/integrations/genkit)
+
+Given that QvikChat is built on top of [Firebase Genkit](https://firebase.google.com/docs/genkit), you can easily extend the functionality of QvikChat using any of the Genkit plugins. For example, you may want to add the [Ollama plugin](https://firebase.google.com/docs/genkit/plugins/ollama) to use a self-hosted open-source LLM model. For more information on adding plugins and configuring Genkit with QvikChat, check the documentation on [Genkit](/integrations/genkit).
+
+## [LangChain Integrations](/integrations/langchain)
+
+**Embedding Models:** QvikChat uses the [text-embedding-004](https://ai.google.dev/gemini-api/docs/models/gemini#text-embedding) model through the Gemini API as the default embedding model for generating embedding for data when using RAG. You can easily use a custom embedding model by simply providing an instance of any [LangChain-supported embedding model](https://js.langchain.com/v0.2/docs/integrations/text_embedding) as the `embeddingModel` when configuring an endpoint using the `retrieverConfig` or in the configuration parameters of the `getDataRetriever` method. To learn more check [Embedding Models](https://qvikchat.pkural.ca/rag-guide/embedding-models).
+
+**Vector Stores:** By default, QvikChat uses an in-memory vector store, but you can easily provide an instance of any hosted vector store supported by [LangChain (JS)](https://js.langchain.com/v0.2/docs/integrations/vectorstores). For more information, check the documentation on [Vector Store](https://qvikchat.pkural.ca/rag-guide/vector-stores).
+
+**Data Loaders:** Out of the box, QvikChat provides support for loading data from text, PDF, JSON, CSV, or a code of a supported programming language. However, if you want to load a file not supported by QvikChat by default, you can simply provide an instance of any [LangChain-supported data loader](https://js.langchain.com/v0.2/docs/integrations/document_loaders) as the `dataLoader` parameter to the `retrieverConfig` or in the configurations parameters of the `getDataRetriever` method. For more info, check [Data Loaders](https://qvikchat.pkural.ca/rag-guide/data-loaders).
+
+To learn more about LangChain integrations, check the [LangChain](/integrations/langchain) section.
+
+## [Firebase](/integrations/firebase)
+
+QvikChat provides support for using Firebase Firestore as a chat history store, cache store and API key store. To learn how to setup Firebase, check the [Firebase](/integrations/firebase) section.

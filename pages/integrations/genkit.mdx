@@ -1,0 +1,64 @@
+# Firebase Genkit Integration
+
+The typical workflow when it comes to creating powerful chat services with QvikChat is to setup genkit, define the chat endpoints, and then run the server.
+
+Given that QvikChat is built on top of [Firebase Genkit](https://firebase.google.com/docs/genkit), you can easily extend the functionality of QvikChat using any of the Genkit plugins. For example, you may want to add the [Ollama plugin](https://firebase.google.com/docs/genkit/plugins/ollama) to use a self-hosted open-source LLM model.
+
+## Setup Genkit
+
+You can use the `setupGenkit` method to setup Genkit with QvikChat. This method takes in a configuration object with the following properties. All properties are optional.
+
+- `plugins`: An array of Genkit plugins to use with QvikChat.
+- `traceStore`: The trace store to use with Genkit.
+- `flowStateStore`: The flow state store to use with Genkit.
+- `enableTracingAndMetrics`: A boolean value to enable tracing and metrics.
+- `logLevel`: The log level to use with Genkit (error, warn, info, debug).
+- `promptDir`: The directory to use for prompts.
+- `telemetry`: Telemetry options to use with Genkit.
+- `defaultModel`: The default LLM model to use with Genkit.
+- `firebaseConfig`: Configurations for configuring the [Firebase plugin for Genkit](https://firebase.google.com/docs/genkit/plugins/firebase).
+
+## Example
+
+Let's consider an example where we want to setup Genkit with QvikChat using the [Ollama plugin](https://firebase.google.com/docs/genkit/plugins/ollama).
+
+### Install the Plugin
+
+First, we need to install the plugin we want to use.
+
+```bash
+npm i --save genkitx-ollama
+```
+
+### Prerequisites
+
+Ollama can be used to run an open-source large language model (LLM) on your own machine. However, to be able to do this, you will first need to install and run the Ollama server. You can download Ollama from [here](https://ollama.com/download).
+
+Once you have Ollama downloaded and installed, you can use the Ollama CLI to download the model you want to use. For example, to download the `llama3` model, you can run the following command.
+
+```bash
+ollama download llama3
+```
+
+### Setup Genkit
+
+Now that we have the plugin installed and the model downloaded, we can setup Genkit with QvikChat.
+
+```typescript
+import { setupGenkit } from "@oconva/qvikchat/genkit";
+import { ollama } from "genkitx-ollama";
+
+// setup Genkit with Ollama plugin
+setupGenkit({
+  plugins: [
+    ollama({
+      models: [
+        {
+          name: "llama3", // model name
+        },
+      ],
+      serverAddress: "http://127.0.0.1:11434", // address and port of the Ollama server
+    }),
+  ],
+});
+```

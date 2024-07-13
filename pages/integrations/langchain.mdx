@@ -1,0 +1,17 @@
+# LangChain Integrations
+
+QvikChat uses [LangChain](https://js.langchain.com/v0.2/docs) primarily when it comes to building chat endpoints that support retrieval-augmented generation (RAG), i.e., chat endpoints that can generate responses by retrieving relevant data from a data source and then generating a response based on the retrieved data. This allows you to build powerful chat services that can provide accurate and relevant responses to user queries based on the data available in the data source.
+
+LangChain provides support for various integrations that can be used with QvikChat to enhance the functionality of chat endpoints. Some of the key integrations include embedding models, vector stores, and data loaders.
+
+## Embedding Models
+
+QvikChat uses the [text-embedding-004](https://ai.google.dev/gemini-api/docs/models/gemini#text-embedding) model through the Gemini API as the default embedding model for generating embedding for data when using RAG. You can easily use a custom embedding model by simply providing an instance of any [LangChain-supported embedding model](https://js.langchain.com/v0.2/docs/integrations/text_embedding) as the `embeddingModel` when configuring an endpoint using the `retrieverConfig` or in the configuration parameters of the `getDataRetriever` method. To learn more check [Embedding Models](/rag-guide/embedding-models).
+
+## Vector Stores
+
+By default, QvikChat uses an in-memory vector store, but you can easily provide an instance of any hosted vector store supported by [LangChain (JS)](https://js.langchain.com/v0.2/docs/integrations/vectorstores). For more information, check the documentation on [Vector Store](/rag-guide/vector-stores).
+
+## Data Loaders
+
+Out of the box, QvikChat provides support for loading data from text, PDF, JSON, CSV, or a code of a supported programming language. However, if you want to load a file not supported by QvikChat by default, you can simply provide an instance of any [LangChain-supported data loader](https://js.langchain.com/v0.2/docs/integrations/document_loaders) as the `dataLoader` parameter to the `retrieverConfig` or in the configurations parameters of the `getDataRetriever` method. For more info, check [Data Loaders](/rag-guide/data-loaders).
