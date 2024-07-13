@@ -41,20 +41,12 @@ If you find value from this project, please consider contributing or sponsoring 
 
 ## Features
 
-- **Firebase Genkit**: Built using the open source [Firebase Genkit framework](https://firebase.google.com/docs/genkit) to help you build powerful production-ready AI-powered apps or services quickly and efficiently.
-- **Deploy to any NodeJS platform**: Deploy your app or service to any NodeJS platform, including Firebase, Google Cloud, AWS, Heroku, etc.
-- **LangChain**: Built using the open source [LangChain framework](https://js.langchain.com/v0.2/docs/introduction/) to help you process data for RAG and information retrieval. Easily extend the framework by using any LangChain supported embedding model, vector store, data loader, and more.
-- **Dotprompt**: Using [Dotprompt](https://firebase.google.com/docs/genkit/dotprompt) for well-structured prompts with all relevant metadata and input-output data validation.
-- **Firebase Firestore**: In-built support for using [Cloud Firestore](https://firebase.google.com/docs/firestore) as chat history store, cache store, and API key store.
-- **Chat agents**: Create chat agents with support for chat history, caching, authentication and information retrieval, in a few lines of code.
-- **API key protected endpoints**: API Key Store to easily manage API keys and ensure that only authorized users can access your app endpoints.
-- **Response Caching**: Cache responses to user queries to improve response times and reduce the number of API calls to LLM.
-- **RAG Agents**: Create chat agents that can use Retrieval Augmented Generation (RAG) to answer user queries by retrieving additional context information (e.g. from a text or JSON file).
-- **RAG Data Loading**: Built-in support for loading text, JSON, PDF, or code files. Easily add new knowledge bases to create new RAG agents.
-- **Focus on Safety, Reliablity and Efficiency**: Every component is built with a focus on ensuring safety, reliability and efficiency. From using prompts that help mitigate LLM hallucination and deter prompt injection attacks, to providing in-built support for enabling authentication for each endpoint, QvikChat is designed to help you build secure, performant and reliable chat apps and services.
+### Features
 
-## Notes
-
-This is a minimalistic extensible framework. Its meant to give you a **starting point** so you can quickly get started with building your chat app or service using Genkit, eliminating the need for you to deal with setting up the whole project from scratch.
-
-This means that this framework is not exhaustive, and you may add more features, chat agent types, cloud-based database support, etc. as you see fit. Since, it is built on top of Genkit and LangChain, you can easily add more models, chat history stores, vector stores and more.
+- **Firebase Genkit**: Built using the open-source [Firebase Genkit framework](https://firebase.google.com/docs/genkit) to help you build powerful production-ready AI-powered services with the possibility of easily extending the framework's functionalities through Genkit plugins.
+- **LangChain**: Built using the open-source [LangChain framework](https://js.langchain.com/v0.2/docs/introduction/) to help you process data for RAG and information retrieval. Easily extend the framework by using any LangChain-supported embedding model, vector store, data loader, and more.
+- **Deploy to any NodeJS platform**: Deploy your app or service to any NodeJS platform, including Firebase, Google Cloud, AWS, Heroku, etc., with ease.
+- **Firebase Firestore**: In-built support for using [Cloud Firestore](https://firebase.google.com/docs/firestore) as the chat history store, cache store, and API key store.
+- **Endpoints with Chat History, Authentication, Caching, and RAG**: Built-in architecture to help you build chat endpoints with support for **conversation history**, **authenticated endpoints**, **response caching** for faster response times, and **RAG** for answering queries that require additional context data.
+- **RAG**: Built-in support for loading text, CSV, JSON, PDF, or code files easily, and generating and storing embeddings in a vector store to support information retrieval for context-aware chat endpoints. Add additional data loaders easily through LangChain, for example, to support ingesting data from cloud storage. For all available integrations for data loaders, check [Document loaders | 🦜️🔗 Langchain.](https://js.langchain.com/v0.1/docs/integrations/document_loaders/)
+- **Focus on Performance, Reliability, and Security**: Every component in QvikChat is built to ensure low latency and scalable performance without compromising on security. From using prompts that help mitigate LLM hallucination and deter prompt injection attacks, to providing in-built support for enabling authentication for each endpoint, QvikChat is designed to help you build secure, performant, and reliable chat apps and services.
