@@ -131,7 +131,7 @@ For failed requests, the response will contain:
 
 ### Usage
 
-Below is an example of how you can define an open-ended chat endpoint that supports chat history. Simply, set the `useChatHistory` flag to `true` and provide an a chat history store. For testing, you may use the in-memory chat history store.
+Below is an example of how you can define an open-ended chat endpoint that supports chat history. Simply, set the `enableChatHistory` flag to `true` and provide an a chat history store. For testing, you may use the in-memory chat history store.
 
 ```typescript copy
 import { InMemoryChatHistoryStore } from "@oconva/qvikchat/history";
@@ -219,7 +219,7 @@ For failed requests, the response will contain:
 
 ### Usage
 
-Below is an example of how you can define an open-ended chat endpoint that supports chat history, response caching, and API key authentication. Simply, set the `useChatHistory`, `enableAuth`, and `enableCache` flags to `true` and provide a chat history store, an API key store and cache store. For testing, you may use the in-memory stores.
+Below is an example of how you can define an open-ended chat endpoint that supports chat history, response caching, and API key authentication. Simply, set the `enableChatHistory`, `enableAuth`, and `enableCache` flags to `true` and provide a chat history store, an API key store and cache store. For testing, you may use the in-memory stores.
 
 Below example is for testing purposes only. In production, you should use a secure API key store and cache store (e.g. FirestoreAPIKeyStore, FirestoreChatHistoryStore, etc.).
 

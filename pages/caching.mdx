@@ -146,27 +146,32 @@ The in-memory cache store is a simple implementation of the cache store that sto
 
 ## Adding Cache Store to Endpoint Configurations
 
-To use a custom cache store in your QvikChat endpoint configurations, you need to provide an instance of the cache store in the endpoint configurations. The following code snippet demonstrates how to add a Firestore cache store to the endpoint configurations:
+You can use Firestore as a cache store. To do this, you need to provide the Firestore cache store as the `cacheStore` to the endpoint configurations when defining the chat endpoint.
 
-```typescript copy {20}
+When creating an instance of the `FirestoreCacheStore` class, you need to provide the following options:
+
+- `firebaseApp`: The Firebase app instance.
+- `collectionName`: The name of the collection that will store the cache.
+
+The collection storing the cache will contain records that follow the structure of the `CacheRecord` interface. For more information, check [Cache Store Interface](#cache-store-interface).
+
+```typescript copy
 import { getFirebaseApp } from "@oconva/qvikchat/firebase";
 import { FirestoreCacheStore } from "@oconva/qvikchat/cache";
 import { defineChatEndpoint } from "@oconva/qvikchat/endpoints";
-import { ChatAgent } from "@oconva/qvikchat/agents";
 
 // Initialize Firebase App
 const firebaseApp = getFirebaseApp();
 
-// Initialize Firestore cache store with the firebase app and collection name
+// Firestore cache store
 const firestoreCacheStore = new FirestoreCacheStore({
-  firebaseApp: firebaseApp,
-  collectionName: "cache-store",
+  firebaseApp,
+  collectionName: "cache", // collection that will store cache
 });
 
-// Chat endpoint with Firestore cache store
+// Chat Endpoint with Firestore cache store
 defineChatEndpoint({
-  chatAgent: new ChatAgent(),
-  endpoint: "chat-cached",
+  endpoint: "chat",
   enableCache: true,
   cacheStore: firestoreCacheStore,
 });

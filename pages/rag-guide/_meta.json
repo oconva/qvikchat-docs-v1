@@ -1,5 +1,7 @@
 {
   "data-ingestion": "Data Ingestion",
   "data-retrieval": "Data Retrieval",
-  "vector-stores": "Vector Stores"
+  "embedding-models": "Embedding Models",
+  "vector-stores": "Vector Stores",
+  "data-loaders": "Data Loaders"
 }

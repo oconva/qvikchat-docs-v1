@@ -14,33 +14,70 @@ Anytime a request is received at an endpoint that requires authentication, the A
 
 To enable authentication, set the `enableAuth` option to `true` when configuring the chat endpoint, and provide an API key store instance.
 
-For example, the following code snippet demonstrates how to enable authentication using a Firestore API key store:
+### Firestore API Key Store
 
-```typescript copy {20}
+For example, the following code snippet demonstrates how to enable authentication using a Firestore API key store. To do this, you need to provide the Firestore API key store as the `apiKeyStore` to the endpoint configurations.
+
+When creating an instance of the `FirestoreAPIKeyStore` class, you need to provide the following options:
+
+- `firebaseApp`: The Firebase app instance.
+- `collectionName`: The name of the collection that will store the API keys.
+
+The collection storing the API keys should contain records that follow the structure of the `APIKeyRecord` interface. For more information, check [API Key Store Interface](#api-key-store-interface).
+
+```typescript copy
 import { getFirebaseApp } from "@oconva/qvikchat/firebase";
 import { FirestoreAPIKeyStore } from "@oconva/qvikchat/auth";
 import { defineChatEndpoint } from "@oconva/qvikchat/endpoints";
-import { ChatAgent } from "@oconva/qvikchat/agents";
 
 // Initialize Firebase App
 const firebaseApp = getFirebaseApp();
 
-// Initialize Firestore API key store with the collection name
-const firestoreApiKeyStore = new FirestoreAPIKeyStore({
-  firebaseApp: firebaseApp,
-  collectionName: "api-keys",
+// Firestore API Key store
+const firestoreCacheStore = new FirestoreAPIKeyStore({
+  firebaseApp,
+  collectionName: "api-keys", // collection where API keys are stored
 });
 
-// Chat endpoint with support for authentication
+// Chat Endpoint with Firestore API Key store
 defineChatEndpoint({
-  chatAgent: new ChatAgent(),
-  endpoint: "chat-auth",
+  endpoint: "chat",
   enableAuth: true,
-  apiKeyStore: firestoreApiKeyStore,
+  apiKeyStore: firestoreCacheStore,
 });
 ```
 
 Remember to initialize the Firebase app before using `FirestoreAPIKeyStore`. To learn more about initializing the Firebase app, check [Initialize Firebase App](/integrations/firebase#initialize-firebase-app)
+
+### In-Memory API Key Store
+
+You can also use an in-memory API key store to manage API keys. This is useful for testing and development purposes. The following code snippet demonstrates how to create an in-memory API key store:
+
+```typescript copy
+import { InMemoryAPIKeyStore } from "@oconva/qvikchat/auth";
+import { defineChatEndpoint } from "@oconva/qvikchat/endpoints";
+
+// Create an in-memory API Key store
+const inMemoryAPIKeyStore = new InMemoryAPIKeyStore();
+
+// Add an API Key to the store
+// Use this API Key and user-id for testing
+inMemoryAPIKeyStore.addKey(
+  "13BtC3sW8LJsi0emWjymnOrWpZI7CmfJ9aT6KliFgjk=", // test API Key
+  {
+    uid: "test-user", // test user id
+    status: "active",
+    endpoints: "all", // allow access to all endpoints
+  }
+);
+
+// Chat Endpoint with in-memory API Key store
+defineChatEndpoint({
+  endpoint: "chat",
+  enableAuth: true,
+  apiKeyStore: inMemoryAPIKeyStore,
+});
+```
 
 ## API Key Store
 

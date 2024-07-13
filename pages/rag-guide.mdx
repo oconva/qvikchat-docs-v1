@@ -30,27 +30,23 @@ Let's take a look at an example below.
 
 A RAG chat endpoint will require a data retriever. You can either call the `getDataRetriever` method to get a retriever and pass this retriever instance as `retriever` to the chat endpoint, or you may use the `retrieverConfig` property of the chat endpoint to provide configurations for the retriever.
 
-**Data Retriever Config**
+### Data Retriever Config
 
 Instead of creating a data retriever separately, you can also provide the data retriever configuration directly in the chat endpoint configuration.
 
 ```typescript copy
 // Inventory Data chat endpoint with support for chat history, authentication, caching and RAG
 defineChatEndpoint({
-  chatAgent: new ChatAgent({
-    agentTypeConfig: {
-      agentType: "rag",
-      topic: "Store Inventory Data",
-    },
-    useChatHistory: true,
-  }),
   endpoint: "rag-chat-inventory",
   enableChatHistory: true,
+  chatHistoryStore, // chat history store instance
+  enableChatHistory: true,
   enableAuth: true,
-  apiKeyStore,
+  apiKeyStore, // API key store instance
   enableCache: true,
-  cacheStore,
+  cacheStore, // cache store instance
   enableRAG: true,
+  topic: "Store Inventory Data", // topic of data for which RAG is enabled
   retrieverConfig: {
     dataType: "csv",
     filePath: "rag/knowledge-bases/inventory-data.csv",
@@ -59,7 +55,9 @@ defineChatEndpoint({
 });
 ```
 
-**Data Retriever Instance**
+Under the hood, the `defineChatEndpoint` function will call the `getDataRetriever` method to create a retriever instance based on the provided retriever configuration and use this retriever instance to retrieve context information from the vector store.
+
+### Data Retriever Instance
 
 If you want to create a data retriever separately, you can call the `getDataRetriever` method to get a retriever instance and pass this retriever instance as `retriever` to the chat endpoint. This method enables you to share the same retriever instance across multiple chat endpoints. If you are generating embeddings for data, then this would be the recommended approach, because you can generate embeddings once and share the retriever instance across multiple chat endpoints.
 
@@ -82,23 +80,18 @@ The `getDataRetriever` function performs the following steps:
 
 Once we have the retriever, we can create a RAG chat endpoint and provide the retriever instance in the endpoint configuration.
 
-```typescript copy {16,17}
+```typescript copy
 // Inventory Data chat endpoint with support for chat history, authentication, caching and RAG
 defineChatEndpoint({
-  chatAgent: new ChatAgent({
-    agentTypeConfig: {
-      agentType: "rag",
-      topic: "Store Inventory Data",
-    },
-    useChatHistory: true,
-  }),
   endpoint: "rag-chat-inventory",
   enableChatHistory: true,
+  chatHistoryStore, // chat history store instance
   enableAuth: true,
-  apiKeyStore,
+  apiKeyStore, // API key store instance
   enableCache: true,
-  cacheStore,
+  cacheStore, // cache store instance
   enableRAG: true,
+  topic: "Store Inventory Data", // topic of data for which RAG is enabled
   retriever: inventoryDataRetriever,
 });
 ```

@@ -2,9 +2,11 @@ import Link from "next/link";
 
 # Getting Started
 
-QvikChat is a framework built on top of Firebase Genkit and LangChain. It allows you to quickly create and deploy a chat service, with support for advance features such as safety guardrails, authentication, response caching, chat history and more.
+QvikChat is a framework built on top of Firebase Genkit and LangChain. It allows you to quickly create and deploy a chat service, with support for advance features such as safety guardrails, authentication, response caching, chat history, Retrieval Augmented Generation (RAG) and more.
 
-## Installation
+If you wish to get started quickly with minimal setup or if you are planning to build a standalone server to serve chat endpoints, its recommended that you start with the [QvikChat Starter Template](#qvikchat-starter-template). It comes pre-configured with support for TypeScript, ESLint, Prettier, Jest, SWC, and more.
+
+## Installing QvikChat Package
 
 You can install QvikChat using the following command:
 
@@ -18,27 +20,34 @@ Or
 pnpm add @oconva/qvikchat
 ```
 
-## Setup Environment Variables
+### Setup Environment Variables
 
-Create a `.env` file in the root of the project and add the following environment variables:
+By default, QvikChat uses Google's Gemini API for text generation and embedding models. If you don't yet have a Google Gen AI API key, you can get one from [Gemini API - Get an API Key](https://ai.google.dev/gemini-api/docs/api-key).
 
-```env copy
+You can also use OpenAI API instead of Gemini API. You'll have to provide your OpenAI API key as the `OPENAI_API_KEY` environment variable and configure your chat endpoints to use the LLM model you want it to use.
+
+QvikChat being built on top of Firebase Genkit, allows you to easily add Genkit plugins. You can easily use any LLM model available through any Genkit plugin by simply configuring that plugin when setting up Genkit.
+
+To learn more about configuring chat endpoints to use a specific LLM model, check [here](/chat-endpoints/chat-endpoint-configurations#chat-agent-config).
+
+If using the default Gemini API models or OpenAI models, there should be a `.env` file at the root level of your project directory, and it should have a value for at least one of the following, depending on which API you want to use:
+
+```bash
 GOOGLE_GENAI_API_KEY=
 OPENAI_API_KEY=
-GOOGLE_APPLICATION_CREDENTIALS=
 ```
 
 Alternatively, you can copy the `.env.tmp` file or rename it to `.env` and fill in the values.
 
-By default QvikChat uses the Google GenAI, so to use QvikChat with default settings, you need to provide the `GOOGLE_GENAI_API_KEY`. You don't have to set values for other environment variables if you are using the default settings.
+### Usage
 
-Add value to the `OPENAI_API_KEY` variable if you're going to use OpenAI models and to the `GOOGLE_APPLICATION_CREDENTIALS` variable if you're going to use Firebase Firestore.
+To use QvikChat, the typical workflow would look something like this:
 
-## Usage
+1. **Setup Genkit:** Before you can deploy your chat endpoints, you need to setup Firebase Genkit, either by using the default configurations or by providing your configurations, these may include additional Genkit plugins you may want to enable (e.g. to add support for a new language model). When starting, we recommend using the default configurations.
+2. **Define Chat Endpoints:** You can define your chat endpoints using the `defineChatEndpoint` method. This method allows you to easily enable or disable features like chat history, cache, authentication, and RAG. All you have to do is provide the appropriate configurations as the argument.
+3. **Run the Server:** Once you have Genkit setup and the chat endpoints defined, all that's left to be done is to start the server. You can use the `runServer` method to start an Expressjs server. You can optionally configure the port number, cors, and other options for the server by providing the configurations in an object.
 
-Before you can deploy your chat endpoints, you need to setup Firebase Genkit, either by using the default configurations or by providing your own configurations, these may include additional Genkit plugins you may want to enable (e.g. to add support for a new language model). When starting out, we recommend using the default configurations.
-
-Create a `index.ts` (or `index.js`) file and add the following code:
+The below code shows a simple example of defining an open-ended chat endpoint in QvikChat. An open-ended chat endpoint basically allows queries related to any topic, i.e., it doesn't place any restrictions on what context the queries should be related to.
 
 ```typescript copy filename="index.ts"
 import { runServer, setupGenkit } from "@oconva/qvikchat/genkit";
@@ -56,7 +65,7 @@ defineChatEndpoint({
 runServer();
 ```
 
-That's it! Running the above code will run a <Link href="https://expressjs.com/" target="_blank" className="text-primary hover:text-primary-hover">Express</Link> server with your defined chat endpoints accessible through it.
+Running the above code will run a <Link href="https://expressjs.com/" target="_blank" className="text-primary hover:text-primary-hover">Express</Link> server with your defined chat endpoint accessible through it.
 
 You should be able to access the chat endpoint defined above at the `chat` endpoint. To test from terminal, you can try the below command:
 
@@ -66,21 +75,11 @@ curl -X POST "http://127.0.0.1:3400/chat" -H "Content-Type: application/json"  -
 
 Above example points to `http://127.0.0.1:3400`. You can change this port and host depending on where you are running the server and on which port.
 
-### How it works?
-
-Each chat service is defined by defining a chat endpoint. The chat endpoint that you define, is the code that gets called when a new request is received at that endpoint. You can define multiple chat services, each with its own endpoint. Each chat endpoint can have various attributes like input data schema, LLM model to be used for processing queries, authentication policy, etc., and you can define these properties and the code that gets executed within an endpoint when defining a chat endpoint.
-
-QvikChat provides you with an easy way to define these chat endpoints _qvikly_ using the **`defineChatEndpoint`** function. This is the real superpower of QvikChat. You can define a chat endpoint with support for chat history, authentication and response caching in just a few lines of code.
-
-To learn more about different chat endpoints that you can define, check the [Chat Endpoints](/chat-endpoints) section.
-
-### Firebase
-
-QvikChat provides out-of-the-box support for using Firebase Firestore as a chat history store, cache store and API key store. To learn how to setup Firebase, check the [Firebase](/integrations/firebase) section.
-
 ## QvikChat Starter Template
 
 To get up and running quickly, you can use the QvikChat starter template. The starter template is a pre-configured project with all the necessary configurations and setup to get you started with QvikChat write quality and reliable code. It comes pre-configured with support for TypeScript, ESLint, Prettier, Jest, SWC, and more, so you can get started with developing the next revolutionary chat app right away, without worrying about all these things.
+
+### Setup
 
 Simply, clone the [QvikChat starter template](https://github.com/oconva/qvikchat-starter-template) to get started.
 
@@ -88,40 +87,54 @@ Simply, clone the [QvikChat starter template](https://github.com/oconva/qvikchat
 git clone https://github.com/oconva/qvikchat-starter-template.git
 ```
 
+### Environment Variables
+
 Once you have cloned the starter template, add the API keys required to access LLM models. By default, QvikChat uses Google's Gemini API for text generation and embedding models. If you don't yet have a Google Gen AI API key, you can get one from [Gemini API - Get an API Key](https://ai.google.dev/gemini-api/docs/api-key).
 
-`.env` should have:
+You can also use OpenAI API instead of Gemini API. You'll have to provide your OpenAI API key as the `OPENAI_API_KEY` environment variable and configure your chat endpoints to use the LLM model you want it to use.
+
+QvikChat being built on top of Firebase Genkit, allows you to easily add Genkit plugins. You can easily use any LLM model available through any Genkit plugin by simply configuring that plugin when setting up Genkit.
+
+To learn more about configuring chat endpoints to use a specific LLM model, check [here](/chat-endpoints/chat-endpoint-configurations#chat-agent-config).
+
+If using the default Gemini API models or OpenAI models, there should be a `.env` file at the root level of your project directory, and it should have a value for at least one of the following, depending on which API you want to use:
 
 ```bash
 GOOGLE_GENAI_API_KEY=
+OPENAI_API_KEY=
 ```
 
-You can also use OpenAI API instead of Gemini API. You'll have to provide your OpenAI API key as the `OPENAI_API_KEY` environment variable and configure your chat endpoints to use a custom chat agent configured with the OpenAI model you want to use. To learn more about configuring chat agents with custom LLM model, check [here](https://qvikchat.pkural.ca/chat-agent#llm-model).
+### Usage
 
-You can run the following commands to install the dependencies and start the server:
+To use QvikChat, the typical workflow would look something like this:
+
+1. **Setup Genkit:** Before you can deploy your chat endpoints, you need to setup Firebase Genkit, either by using the default configurations or by providing your configurations, these may include additional Genkit plugins you may want to enable (e.g. to add support for a new language model). When starting, we recommend using the default configurations.
+2. **Define Chat Endpoints:** You can define your chat endpoints using the `defineChatEndpoint` method. This method allows you to easily enable or disable features like chat history, cache, authentication, and RAG. All you have to do is provide the appropriate configurations as the argument.
+3. **Run the Server:** Once you have Genkit setup and the chat endpoints defined, all that's left to be done is to start the server. You can use the `runServer` method to start an Expressjs server. You can optionally configure the port number, cors, and other options for the server by providing the configurations in an object.
+
+### Running the Project
+
+QvikChat starter template comes pre-defined with some chat endpoints. These endpoints are defined in the `src/endpoints` directory. We setup Genkit and run the server in the `src/index.ts` file.
+
+You can run the following commands to install the dependencies:
 
 ```bash
 npm install # or pnpm install
-npm run dev # or pnpm dev
 ```
 
-To build the project, run:
+To start the server, run:
 
-```bash copy
-npm run build # or pnpm build
+```bash
+npm run start # or pnpm start
 ```
 
-And to run the included tests, run:
-
-```bash copy
-npm run test # or pnpm test
-```
+Check the [testing endpoints](#testing-endpoints) section to learn how to test endpoints.
 
 To learn more about the QvikChat starter template, check the [QvikChat Starter Template](https://github.com/oconva/qvikchat-starter-template) repo.
 
-## Testing
+## Testing Endpoints
 
-You can test the pre-defined test endpoints to see how the chat endpoints work and to confirm QvikChat setup. Below are the two ways you can do this. Refer to the [Chat Endpoints](/chat-endpoints) section for more information on the different types of chat endpoints that you can test (and available pre-defined endpoints).
+You can test the pre-defined test endpoints to see how the chat endpoints work and to confirm QvikChat setup. You can do this either using a graphical interface or by running the server locally and testing the endpoints using the terminal.
 
 ### Genkit Developer UI
 
@@ -145,6 +158,8 @@ Then start the Genkit developer UI:
 genkit start
 ```
 
+You should be able to see your defined chat endpoints under the **Flows** section in the left sidebar. Simply click on the endpoint you want to test and enter the query you want to test with. Clicking the **Run** button will send the query to the endpoint and the response generation process will start.
+
 ### Running the Server
 
 You can also run the server locally to test the endpoints from their REST endpoints.
@@ -166,7 +181,7 @@ pnpm build
 Then, start the server:
 
 ```bash copy
-npm start
+npm run start
 ```
 
 Or
@@ -175,42 +190,16 @@ Or
 pnpm start
 ```
 
-## Developing From Source Code
+Depending on which endpoint you wish to test, and where and on which port your server starts, you should be able to access the chat endpoints through the terminal using the `curl` command. The below given example sends the query to the `chat` endpoint:
 
-You may want to develop from the source code if you want to extend or modify the functionality of QvikChat for your use case.
+```bash copy
+curl -X POST "http://127.0.0.1:3400/chat" -H "Content-Type: application/json"  -d '{"data": { "query": "Answer in one sentence: What is Firebase Firestore?" } }'
+```
 
-1.  Clone this repository.
+## How it works?
 
-    ```bash copy
-    git clone https://github.com/oconva/qvikchat.git
-    ```
+Each chat service is defined by defining a chat endpoint. The chat endpoint that you define, is the code that gets called when a new request is received at that endpoint. You can define multiple chat services, each with its own endpoint. Each chat endpoint can have various attributes like input data schema, LLM model to be used for processing queries, authentication policy, etc., and you can define these properties and the code that gets executed within an endpoint when defining a chat endpoint.
 
-2.  Install dependencies.
+QvikChat provides you with an easy way to define these chat endpoints _qvikly_ using the **`defineChatEndpoint`** function. This is the real superpower of QvikChat. You can define a chat endpoint with support for chat history, authentication and response caching in just a few lines of code.
 
-    ```bash copy
-    npm install
-    ```
-
-    Or
-
-    ```bash copy
-    pnpm add
-    ```
-
-3.  By default this project uses Google's Gemini models (specifically, `gemini-1.5-flash`).
-
-        Add your Google AI API key in the `.env` file.
-
-        ```bash copy
-        GOOGLE_GENAI_API_KEY=<your GOOGLE_GENAI_API_KEY>
-        ```
-
-    You may choose to use a different model. Configure the genkit plugins accordingly and supply the model to the `ChatAgent` constructor when defining a chat endpoint. For more information on configuring Genkit plugins to use a different model [check here](https://firebase.google.com/docs/genkit/models#models).
-
-    Out-of-the-box, QvikChat also supports OpenAI models and Firebase Firestore (for chat history store, cache store and API key store). If you wish to use any of these, add the required API keys for these to the `.env` file as well.
-
-    ```bash copy
-    GOOGLE_GENAI_API_KEY=<your GOOGLE_GENAI_API_KEY>
-    OPENAI_API_KEY=<your OPENAI_API_KEY>
-    FIREBASE_API_KEY=<your FIREBASE_API_KEY>
-    ```
+To learn more about different chat endpoints that you can define, check the [Chat Endpoints](/chat-endpoints) section.

@@ -38,6 +38,20 @@ Below are some of the chat endpoint configurations you can define.
 - `retriever`: Method to retrieve documents for RAG. Can be obtained from the `getDataRetriever` method.
 - `retrieverConfig`: Configuration for the RAG retriever, for example, number of documents to retrieve, algorithm to use, etc.
 
+## Chat Agent Config
+
+Under the hood, each chat endpoint uses a `ChatAgent` to process the query and generate responses. This chat agent has a LLM model specified for response generation, a default system prompt based on agent type, chat prompts, and optionally, any configured tools.
+
+You can use the `chatAgentConfig` property to override the default configurations for the chat agent. Below are the properties you can set in the `chatAgentConfig` object:
+
+- `model`: Name of the LLM model to use for the chat agent. If not provided, the default model for the agent type will be used.
+- `modelConfig`: Configuration for the LLM model. This can include parameters like temperature, max output tokens, and safety settings.
+- `systemPrompt`: Default system prompt to use for the chat agent. If not provided, the default system prompt for the agent type will be used.
+- `chatPrompt`: Default chat prompt to use for the chat agent. If not provided, the default chat prompt for the agent type will be used.
+- `tools`: Array of tools to use for the chat agent.
+
+Please ensure that you have configured the project to use the model, if you specify any specific model name. For using models through the Gemini API or OpenAI API, ensure that you've setup the [correct environment variables](/getting-started#environment-variables). For any other models, please ensure you've added the Genkit plugin correctly. For more information on setting up Genkit plugins, check [Genkit integration](/integrations/genkit).
+
 ## Example
 
 Below is an example of a comprehensively configured chat endpoint. You don't need to provide all the configurations, only the ones you need. Below example is only for demonstration purposes.

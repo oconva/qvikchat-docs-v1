@@ -85,6 +85,20 @@ export interface ChatHistoryStore {
 - `getChatHistory`: Retrieves the chat history for a given chat ID.
 - `deleteChatHistory`: Deletes the chat history for a given chat ID.
 
+### Chat History Record
+
+Each chat history record stored in a chat history store follows the structure below:
+
+```typescript copy
+/**
+ * Represents a record of chat history.
+ */
+export type ChatHistoryRecord = {
+  messages: MessageData[];
+  lastUpdated?: Date;
+};
+```
+
 ## Providing Chat History Store to Chat Endpoint
 
 You can provide an instance of a chat history store to the `defineChatEndpoint` function. The chat endpoint will use this store to manage chat histories.
@@ -102,22 +116,35 @@ defineChatEndpoint({
 
 ## Use Firebase Firestore as Chat History Store
 
-You can use Firebase Firestore as a chat history store. Remember to initialize the Firebase app before using it. To learn more about initializing the Firebase app, check [Initialize Firebase App](/integrations/firebase#initialize-firebase-app)
+You can use Firestore as a chat history store. To do this, you can provide an instance of the `FirestoreChatHistoryStore` class as the `chatHistoryStore` when configuring the chat endpoint using `defineChatEndpoint` function.
+
+When creating an instance of the `FirestoreChatHistoryStore` class, you need to provide the following options:
+
+- `firebaseApp`: The Firebase app instance.
+- `collectionName`: The name of the collection that will store the chat history.
+
+The collection storing the chat history will contain records that follow the structure of the `ChatHistoryRecord` type. For more information, check [Chat History Record](#chat-history-record).
 
 ```typescript copy
 import { getFirebaseApp } from "@oconva/qvikchat/firebase";
 import { FirestoreChatHistoryStore } from "@oconva/qvikchat/history";
+import { defineChatEndpoint } from "@oconva/qvikchat/endpoints";
 
 // Initialize Firebase App
 const firebaseApp = getFirebaseApp();
 
-// Open-ended chat endpoint using Firestore chat history store
+// Firestore chat history store
+const firestoreChatHistoryStore = new FirestoreChatHistoryStore({
+  firebaseApp,
+  collectionName: "chat-history", // collection that will store chat history
+});
+
+// Chat Endpoint with Firestore chat history store
 defineChatEndpoint({
-  endpoint: "chat-open-history",
+  endpoint: "chat",
   enableChatHistory: true,
-  chatHistoryStore: new FirestoreChatHistoryStore({
-    firebaseApp: firebaseApp,
-    collectionName: "chat-history",
-  }),
+  chatHistoryStore: firestoreChatHistoryStore,
 });
 ```
+
+Remember to initialize the Firebase app before using `FirestoreCacheStore`. To learn more about initializing the Firebase app, check [Initialize Firebase App](/integrations/firebase#initialize-firebase-app)
