@@ -8,13 +8,13 @@ type SponsorBtnProps = {
 };
 
 export const SponsorBtn = ({
-  variant = "default",
+  variant = "outline",
   className,
 }: SponsorBtnProps) => {
   return (
-    <div id="sponsor-btn" className={`w-fit mt-5`}>
-      <Link href="https://github.com/sponsors/oconva">
-        <SponsorNavBtn variant="outline" />
+    <div id="sponsor-btn" className={`w-fit mt-5 ${className}`}>
+      <Link href="https://github.com/sponsors/oconva" className="no-style-link">
+        <SponsorNavBtn variant={variant} />
       </Link>
     </div>
   );

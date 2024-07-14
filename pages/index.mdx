@@ -1,32 +1,35 @@
 import { SponsorBtn } from "../components/sponsor-btn";
 import { Button } from "../components/ui/button";
 import { Notice } from "../components/notice";
-import QvikChatRagDemoImg from "../components/qvikchat-rag-demo-img";
+import Img from "../components/img";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
 <div className="text-3xl font-bold mt-5">QvikChat</div>
 <div className="block text-muted font-light">
-  Framework to build secure, performant and reliable chat apps and services
+  Framework to build secure, performant, and reliable chat apps and services
   quickly and efficiently.
 </div>
-<div className="mt-5 text-primary">
+<div className="mt-5 text-primary-hover">
   Built on top of Firebase Genkit + LangChain. Power of both, simplicity of one.
 </div>
 
-Develop a self-hosted production-ready AI-powered chat app or service at a rapid pace
-with this [Firebase Genkit](https://github.com/firebase/genkit) and
-[LangChain](https://js.langchain.com/v0.2/docs/introduction/) based framework.
+Develop a self-hosted production-ready AI-powered chat app or service at a rapic pace with this powerful [Firebase Genkit](https://github.com/firebase/genkit) and [LangChain](https://js.langchain.com/v0.2/docs/introduction/) based framework.
 
 **QvikChat** is a framework that provides you with a solid foundation to build powerful AI-powered chat service endpoints quickly and efficiently. It includes support for **multiple types of conversations (open-ended, close-ended)**, **chat history**, **response caching**, **authentication**, and **information retrieval using Retrieval Augmented Generation (RAG).**
 
 <Button variant="default" className="my-5">
-  <Link href="/getting-started" className="flex flex-row gap-1">
+  <Link href="/getting-started" className="no-style-link flex flex-row gap-1">
     <span>Get Started</span> <ChevronRight strokeWidth="1.8px" />
   </Link>
 </Button>
 
-<QvikChatRagDemoImg showSubtitle="true" />
+<Img
+  src="/images/qvikchat-rag-demo.png"
+  showSubtitle="true"
+  subtitle="QvikChat RAG endpoint demo"
+  priority={true}
+/>
 
 <Notice>
   Note: This is not an official Firebase Genkit or LangChain framework. This is

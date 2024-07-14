@@ -1,3 +1,5 @@
+import Img from "../components/img";
+
 # Retrieval Augmented Generation
 
 Retrieval Augmented Generation (RAG) is a model that combines the strengths of retrieval and generation models. It uses a **retriever** to find relevant information from a corpus of documents, and a **generator** to generate the answer based on the user query, any previous conversation history, and the retrieved relevant context information. This allows the model to generate more accurate and coherent answers than a generation model alone.
@@ -10,17 +12,30 @@ Building your own RAG chat endpoints with QvikChat is simple. There are three ma
 2. **Data Retriever**: Creating and storing an instance of a data retriever, that can be used to retrieve the relevant context information from the vector store. You can configure the retriever to use a specific retrieval method (e.g. similarity matching or Maximal Marginal Relevance (MMR)).
 3. **RAG Chat Endpoint**: Define a chat endpoint with RAG enabled, and provide the retriever instance in this endpoint configuration. When a user query is received, the provided retriever will be used to retrieve the relevant context information from the vector store.
 
+The below diagram illustrates the underlying process for the creation of a RAG-enabled chat endpoint with support for chat history, cache, and authentication.
+
+<Img
+  src="/images/rag-chat-endpoint-creation.png"
+  showSubtitle="true"
+  subtitle="QvikChat RAG chat endpoint creation with history, cache, and authentication"
+  priority={true}
+/>
+
 ## Data Ingestion
 
 In this stage, you load your data files into a vector store as embeddings. An embedding is a numerical representation of the data that captures its semantic meaning. The embeddings are then stored in a vector store, which is a database that allows you to efficiently retrieve similar embeddings based on a query.
 
 QvikChat provides support for loading different types of data files right out of the box. Before embeddings can be generated for the data, the data needs to be split into chunks. The chunking strategy can be configured based on the data type and the desired granularity of the context information. For example, for text data, you can split the text into paragraphs or sentences, and for a CSV or JSON file you may split data by newline or by record.
 
+To learn more check [Data Ingestion](/rag-guide/data-ingestion).
+
 ## Data Retriever
 
 The data retriever is responsible for retrieving the relevant context information from the vector store based on the user query. The retriever can use different retrieval methods to find the most relevant context information. For example, it can use similarity matching to find the most similar embeddings to the query, or it can use MMR to find a diverse set of relevant context information.
 
 When a user query is received, that query is encoded into an embedding, and the retriever uses this embedding to retrieve the most relevant context information from the vector store. The retriever can be configured with different parameters, such as the number of context information chunks to retrieve, the retrieval method to use, and the similarity threshold.
+
+To learn more check [Data Retrieval](/rag-guide/data-retrieval).
 
 ## RAG Chat Endpoint
 
@@ -95,3 +110,16 @@ defineChatEndpoint({
 ```
 
 And that is it! You have now created a RAG chat endpoint with QvikChat. You can now deploy this chat endpoint and start interacting with it.
+
+## Query Processing
+
+When a user query is received by a RAG chat endpoint, the endpoint will use the provided retriever to retrieve the relevant context information from the vector store. The retrieved context information is then sent to the LLM along with any other required information like previous conversation messages, user query, etc., to generate the answer to the user query.
+
+Below images gives a high-level overview of how a user query is handled by a chat endpoint that supports RAG and chat history.
+
+<Img
+  src="/images/rag-history-endpoint-query.png"
+  showSubtitle="true"
+  subtitle="High-level overview of query processing by chat endpoint with RAG and chat history"
+  priority={false}
+/>
