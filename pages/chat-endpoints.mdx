@@ -1,3 +1,5 @@
+import Img from "../components/img";
+
 # Chat Endpoints
 
 You can define various chat endpoints based on your requirements.
@@ -33,3 +35,12 @@ Chat endpoint where user queries are restricted to a specific topic. Prevents mi
 Context-aware and topic-specific chat with ability to answer user queries by retrieving additional context information from a knowledge base (e.g. from a JSON file or PDF).
 
 [Read more](chat-endpoints/rag-chat)
+
+Below images gives a high-level overview of how a user query is handled in a RAG chat endpoint.
+
+<Img
+  src="/images/rag-history-endpoint-query.png"
+  showSubtitle="true"
+  subtitle="High-level overview of how chat endpoints handle user queries"
+  priority={false}
+/>

@@ -104,7 +104,8 @@ main
   position: relative;
   z-index: 1;
   font-weight: 600;
-  padding: 0.25em 0.25em 0.1em 0.25em;
+  padding-right: 0.1em;
+  padding-left: 0.1em;
   color: #0797b9;
 }
 
@@ -123,23 +124,6 @@ main
 
 .nextra-code-block pre {
   background-color: hsl(212, 100%, 52.55%, 0.05);
-}
-
-:is(html[class~="dark"]) {
-  .nextra-code-block pre {
-    background-color: hsl(212, 100%, 77%, 0.1);
-  }
-
-  .rt-Box {
-    position: absolute;
-    left: 0px;
-    right: 0px;
-    top: 0px;
-    height: 480px;
-    opacity: 0.6;
-    z-index: -5;
-    background: linear-gradient(to bottom, #342d2a, transparent);
-  }
 }
 
 .nextra-menu-desktop li.active > a {
@@ -186,4 +170,36 @@ main
 .nextra-scrollbar div.nx-mt-8 {
   background-color: transparent !important;
   box-shadow: none !important;
+}
+
+footer {
+  color: #4c4b4b !important;
+  background-color: var(--secondary) !important;
+  background: linear-gradient(
+    to top,
+    hsl(var(--nextra-primary-hue), var(--nextra-primary-saturation), 77%, 0.6),
+    transparent
+  ) !important;
+}
+
+:is(html[class~="dark"]) {
+  .nextra-code-block pre {
+    background-color: hsl(212, 100%, 77%, 0.1);
+  }
+
+  .rt-Box {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    height: 480px;
+    opacity: 0.6;
+    z-index: -5;
+    background: linear-gradient(to bottom, #342d2a, transparent);
+  }
+
+  footer {
+    color: #c1b9bd !important;
+    background: linear-gradient(to top, #342d2a, transparent) !important;
+  }
 }

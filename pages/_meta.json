@@ -11,8 +11,11 @@
   "caching": "Caching",
   "authentication": "Authentication",
   "integrations": "Integrations",
-  "another": {
-    "display": "hidden"
+  "deployment": "Deployment",
+  "Examples": {
+    "title": "Examples ↗",
+    "href": "https://github.com/oconva/qvikchat-examples",
+    "newWindow": true
   },
   "about": {
     "title": "About",

@@ -1,4 +1,4 @@
-# Close Ended Chat
+# Close-ended Chat
 
 Chat endpoint where user queries are restricted to a specific topic. Prevents misuse of the chat service by restricting the usage, for example, a chat service meant to answer queries related to a specific topic like Firebase won't answer user queries related to other topics like solving a calculus assignment question.
 
@@ -14,39 +14,6 @@ Below are some of the close-ended chat endpoints you can define.
 
 Restricted chat to a specific topic with no chat history support.
 
-### Expected Input Schema
-
-- `data`: User query to chat agent.
-
-  ```json
-  {
-    "data": "string",
-    "required": ["data"]
-  }
-  ```
-
-### Output Schema
-
-For successful requests, the response will contain:
-
-- `result`: Chat agent response to the user query, returned as a string by default. (You may add more endpoints or update existing ones under `src/endpoints`)
-
-  ```json
-  {
-    "result": "string"
-  }
-  ```
-
-For failed requests, the response will contain:
-
-- `error`: Error message returned by the server.
-
-  ```json
-  {
-    "error": "string"
-  }
-  ```
-
 ### Usage
 
 Below is an example of how you can define a close-ended chat endpoint. You can use the `topic` field to specify the topic for which this endpoint should answer queries.
@@ -61,42 +28,15 @@ defineChatEndpoint({
 });
 ```
 
-Can use commands below to test this endpoint.
+### Input Schema
 
-For the first example, ideally, you should get a response that the model can't answer the question since it's not related to the specified topic, establishing that the chat agent is working as expected. It should, however, generate a proper answer for the second example.
-
-```bash copy
-curl -X POST "http://127.0.0.1:3400/chat-close" -H "Content-Type: application/json"  -d '{"data": { "query" : "Can you help me with my calculus assignment?" } }'
-
-curl -X POST "http://127.0.0.1:3400/chat-close" -H "Content-Type: application/json"  -d '{"data": { "query" : "What is App check?" } }'
-```
-
-#### Genkit Developer UI
-
-You could also start the Genkit Developer UI to test above:
-
-```bash copy
-npx genkit start
-```
-
-Endpoint to test: `chat-close`
-
-## Close Chat with History
-
-Restricted chat to a specific topic with chat history support.
-
-### Expected Input Schema
+Expects an object with the following properties:
 
 - `query`: User query to chat agent.
-- `chatId`: Optional chat ID to continue the chat history. If not provided, a new chat history will be created, and the chat ID for this chat history will be returned with the response. This chat ID can be sent in further requests to continue a specific conversation. If the provided chat ID is not valid or not found, as error is returned.
 
   ```json
   {
-    "data": {
-      "query": "string",
-      "chatId": "string"
-    },
-    "required": ["query"]
+    "query": "string"
   }
   ```
 
@@ -105,14 +45,10 @@ Restricted chat to a specific topic with chat history support.
 For successful requests, the response will contain:
 
 - `response`: Chat agent response to the user query, returned as a string by default. (You may add more endpoints or update existing ones under `src/endpoints`)
-- `chatId`: Chat ID for the current chat history. This can be used to continue the chat history in further requests.
 
   ```json
   {
-    "result": {
-      "response": "string",
-      "chatId": "string"
-    }
+    "response": "string"
   }
   ```
 
@@ -125,6 +61,32 @@ For failed requests, the response will contain:
     "error": "string"
   }
   ```
+
+### Testing
+
+Can use commands below to test the endpoint defined in the example above.
+
+For the first example, ideally, you should get a response that the model can't answer the question since it's not related to the specified topic, establishing that the chat agent is working as expected. It should, however, generate a proper answer for the second example.
+
+```bash copy
+curl -X POST "http://127.0.0.1:3400/chat-close" -H "Content-Type: application/json"  -d '{"data": { "query" : "Can you help me with my calculus assignment?" } }'
+
+curl -X POST "http://127.0.0.1:3400/chat-close" -H "Content-Type: application/json"  -d '{"data": { "query" : "What is App check?" } }'
+```
+
+**Genkit Developer UI**
+
+You could also start the Genkit Developer UI to test above:
+
+```bash copy
+npx genkit start
+```
+
+Endpoint to test: `chat-close`
+
+## Close Chat with History
+
+Restricted chat to a specific topic with chat history support.
 
 ### Usage
 
@@ -141,46 +103,17 @@ defineChatEndpoint({
 });
 ```
 
-```bash copy
-curl -X POST "http://127.0.0.1:3400/chat-close-history" -H "Content-Type: application/json"  -d '{"data": { "query": "What is App check?" } }'
+### Input Schema
 
-curl -X POST "http://127.0.0.1:3400/chat-close-history" -H "Content-Type: application/json"  -d '{"data": { "query": "By using this, can you block traffic that does not have valid credentials?", "chatId": "<enter chat id here>" } }'
-```
-
-### Genkit Developer UI
-
-You could also start the Genkit Developer UI to test above:
-
-```bash copy
-npx genkit start
-```
-
-Endpoint to test: `chat-close-history`
-
-## Close Chat with Chat History, Caching, and Authentication
-
-Restricted chat to a specific topic with chat history support, response caching, and API key authentication.
-
-### Expected Input Schema
-
-Request header requires an API key for authentication:
-
-- `key`: API key for authentication. The API key must be owned by the user making the request, and should have authorization to access the endpoint endpoint.
-
-Request body data:
+Expects an object with the following properties:
 
 - `query`: User query to chat agent.
-- `uid`: User ID of the user making the query. Required to assess if user is authorized to access the endpoint endpoint. The API key provided in headers must be owned by this user.
 - `chatId`: Optional chat ID to continue the chat history. If not provided, a new chat history will be created, and the chat ID for this chat history will be returned with the response. This chat ID can be sent in further requests to continue a specific conversation. If the provided chat ID is not valid or not found, as error is returned.
 
   ```json
   {
-    "data": {
-      "query": "string",
-      "uid": "string",
-      "chatId": "string"
-    },
-    "required": ["query", "uid"]
+    "query": "string",
+    "chatId": "string"
   }
   ```
 
@@ -193,10 +126,8 @@ For successful requests, the response will contain:
 
   ```json
   {
-    "result": {
-      "response": "string",
-      "chatId": "string"
-    }
+    "response": "string",
+    "chatId": "string"
   }
   ```
 
@@ -210,11 +141,47 @@ For failed requests, the response will contain:
   }
   ```
 
+### Testing
+
+Can use commands below to test the endpoint defined in the example above.
+
+```bash copy
+curl -X POST "http://127.0.0.1:3400/chat-close-history" -H "Content-Type: application/json"  -d '{"data": { "query": "What is App check?" } }'
+
+curl -X POST "http://127.0.0.1:3400/chat-close-history" -H "Content-Type: application/json"  -d '{"data": { "query": "By using this, can you block traffic that does not have valid credentials?", "chatId": "<enter chat id here>" } }'
+```
+
+**Genkit Developer UI**
+
+You could also start the Genkit Developer UI to test above:
+
+```bash copy
+npx genkit start
+```
+
+Endpoint to test: `chat-close-history`
+
+## Close Chat with Chat History, Caching, and Authentication
+
+Restricted chat to a specific topic with chat history support, response caching, and API key authentication.
+
 ### Usage
 
-Below example displays how you can define a close-ended chat endpoint that supports chat history, response caching, and API key authentication. The example below uses in-memory stores for chat history, caching and API key Storage, but you can easily provide your own stores when configuring the endpoint.
+Below example displays how you can define a close-ended chat endpoint that supports chat history, response caching, and API key authentication.
+
+The example below uses in-memory stores for chat history, caching and API key Storage, but you can easily provide your own stores when configuring the endpoint.
 
 ```typescript copy
+// Initialize a Test API key store
+const testAPIKeyStore = new InMemoryAPIKeyStore();
+// add a test API key
+const key = "test-api-key";
+testAPIKeyStore.addKey(key, {
+  uid: "test-user",
+  status: "active",
+  endpoints: "all", // allow access to all endpoints
+});
+
 // Close-ended chat endpoint with support for chat history, authentication, and caching
 defineChatEndpoint({
   agentType: "close-ended",
@@ -223,23 +190,69 @@ defineChatEndpoint({
   enableChatHistory: true,
   chatHistoryStore: new InMemoryChatHistoryStore(),
   enableAuth: true,
-  apiKeyStore: new InMemoryAPIKeyStore(),
+  apiKeyStore: testAPIKeyStore,
   enableCache: true,
   cacheStore: new InMemoryCacheStore(),
 });
 ```
 
-You can use the commands below to test this endpoint.
+### Input Schema
+
+Request header requires an API key for authentication:
+
+- `key`: API key for authentication. The API key must be owned by the user making the request, and should have authorization to access the endpoint endpoint.
+
+In request data, expects an object with the following properties:
+
+- `query`: User query to chat agent.
+- `uid`: User ID of the user making the query. Required to assess if user is authorized to access the endpoint endpoint. The API key provided in headers must be owned by this user.
+- `chatId`: Optional chat ID to continue the chat history. If not provided, a new chat history will be created, and the chat ID for this chat history will be returned with the response. This chat ID can be sent in further requests to continue a specific conversation. If the provided chat ID is not valid or not found, as error is returned.
+
+  ```json
+  {
+    "query": "string",
+    "uid": "string",
+    "chatId": "string"
+  }
+  ```
+
+### Output Schema
+
+For successful requests, the response will contain:
+
+- `response`: Chat agent response to the user query, returned as a string by default. (You may add more endpoints or update existing ones under `src/endpoints`)
+- `chatId`: Chat ID for the current chat history. This can be used to continue the chat history in further requests.
+
+  ```json
+  {
+    "response": "string",
+    "chatId": "string"
+  }
+  ```
+
+For failed requests, the response will contain:
+
+- `error`: Error message returned by the server.
+
+  ```json
+  {
+    "error": "string"
+  }
+  ```
+
+### Testing
+
+Can use commands below to test the endpoint defined in the example above.
 
 On running the first example, you should receive an object as a response with the chat ID for the chat history. Add this chat ID to the second example to continue the chat history.
 
 ```bash copy
-curl -X POST "http://127.0.0.1:3400/chat-close-history-auth-cached" -H "Content-Type: application/json" -H "Authorization: YOUR_API_KEY" -d '{"data": { "query": "What is App check?" } }'
+curl -X POST "http://127.0.0.1:3400/chat-close-history-auth-cached" -H "Content-Type: application/json" -H "Authorization: test-api-key" -d '{"data": { "query": "What is App check?", "uid": "test-user" } }'
 
-curl -X POST "http://127.0.0.1:3400/chat-close-history-auth-cached" -H "Content-Type: application/json" -H "Authorization: YOUR_API_KEY" -d '{"data": { "query": "By using this, can you block traffic that does not have valid credentials?", "chatId": "<enter chat id here>" } }'
+curl -X POST "http://127.0.0.1:3400/chat-close-history-auth-cached" -H "Content-Type: application/json" -H "Authorization: test-api-key" -d '{"data": { "query": "By using this, can you block traffic that does not have valid credentials?", "uid": "test-user", "chatId": "<enter chat id here>" } }'
 ```
 
-### Genkit Developer UI
+**Genkit Developer UI**
 
 You could also start the Genkit Developer UI to test above:
 

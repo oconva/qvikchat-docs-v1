@@ -71,6 +71,8 @@ defineChatEndpoint({
 
 Under the hood, the `defineChatEndpoint` function will call the `getDataRetriever` method to create a retriever instance based on the provided retriever configuration and use this retriever instance to retrieve context information from the vector store.
 
+To learn more about defining RAG-enabled chat endpoints, check [RAG Chat](/chat-endpoints/rag-chat).
+
 ### Data Retriever Instance
 
 If you want to create a data retriever separately, you can call the `getDataRetriever` method to get a retriever instance and pass this retriever instance as `retriever` to the chat endpoint. This method enables you to share the same retriever instance across multiple chat endpoints. If you are generating embeddings for data, then this would be the recommended approach, because you can generate embeddings once and share the retriever instance across multiple chat endpoints.
