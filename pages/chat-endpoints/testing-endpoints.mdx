@@ -1,0 +1,37 @@
+import Img from "../../components/img";
+
+# Testing Chat Endpoints
+
+Once you have defined your chat endpoints, you can send queries to them through the Genkit Developer UI or by running your own server.
+
+## Running Your Own Server
+
+Once, you have the server running, you can send queries to your chat endpoints using a tool like `curl` or Postman.
+
+For an example, check [Getting Started - Usage](/getting-started#usage)
+
+## Genkit Developer UI
+
+You could also start the Genkit Developer UI instead of running your own server for testing, using the following command:
+
+```bash copy
+genkit start
+```
+
+OR (if you haven't installed Genkit CLI globally)
+
+```bash copy
+npx genkit start
+```
+
+For more information on how to install the Firebase Genkit CLI, please check the [Genkit CLI documentation](https://firebase.google.com/docs/genkit/get-started).
+
+Once you have the Genkit Developer UI loaded in your browser, you should be able to see your defined chat endpoints under the **Flows** section in the left sidebar. Simply click on the endpoint you want to test and enter the query you want to test with. Clicking the **Run** button will send the query to the endpoint and the response generation process will start.
+
+The below image shows a sample of the Genkit Developer UI:
+
+<Img
+  src="/images/qvikchat-genkit-developer-ui-sample.png"
+  priority={false}
+  className="my-5 rounded-lg"
+/>
