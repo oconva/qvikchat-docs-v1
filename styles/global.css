@@ -95,3 +95,95 @@
 #sponsor-btn:hover svg {
   fill: #ffffff !important;
 }
+
+main
+  a:not(.no-style-link):not(.subheading-anchor):not(.nx-flex):not(
+    .nextra-breadcrumb a
+  ) {
+  text-decoration: none !important;
+  position: relative;
+  z-index: 1;
+  font-weight: 600;
+  padding: 0.25em 0.25em 0.1em 0.25em;
+  color: #0797b9;
+}
+
+main blockquote a {
+  font-weight: normal !important;
+}
+
+main
+  a:not(.no-style-link):not(.subheading-anchor):not(.nx-flex):not(
+    .nextra-breadcrumb a
+  ):hover {
+  background-color: #0797b9;
+  color: #fff;
+  transition: all 0.2s ease-in-out;
+}
+
+.nextra-code-block pre {
+  background-color: hsl(212, 100%, 52.55%, 0.05);
+}
+
+:is(html[class~="dark"]) {
+  .nextra-code-block pre {
+    background-color: hsl(212, 100%, 77%, 0.1);
+  }
+
+  .rt-Box {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    height: 480px;
+    opacity: 0.6;
+    z-index: -5;
+    background: linear-gradient(to bottom, #342d2a, transparent);
+  }
+}
+
+.nextra-menu-desktop li.active > a {
+  color: hsl(
+    var(--nextra-primary-hue),
+    var(--nextra-primary-saturation),
+    50%
+  ) !important;
+}
+
+.nextra-menu-desktop li a:hover {
+  color: hsl(
+    var(--nextra-primary-hue),
+    var(--nextra-primary-saturation),
+    50%
+  ) !important;
+  background-color: hsl(
+    var(--nextra-primary-hue),
+    var(--nextra-primary-saturation),
+    90%,
+    0.3
+  );
+}
+
+.rt-Box {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  height: 480px;
+  opacity: 0.6;
+  z-index: -5;
+  background: linear-gradient(
+    to bottom,
+    hsl(var(--nextra-primary-hue), var(--nextra-primary-saturation), 77%, 0.3),
+    transparent
+  );
+}
+
+.nextra-nav-container-blur {
+  background-color: transparent !important;
+}
+
+.nextra-scrollbar div.nx-mt-8 {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}

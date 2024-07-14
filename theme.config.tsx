@@ -14,7 +14,7 @@ const config: DocsThemeConfig = {
     icon: <SponsorNavBtn variant="outline"></SponsorNavBtn>,
     link: "https://github.com/sponsors/oconva",
   },
-  docsRepositoryBase: "https://github.com/oconva/qvikchat-docs",
+  docsRepositoryBase: "https://github.com/oconva/qvikchat-docs/tree/main",
   footer: {
     text: "QvikChat - A project by Oconva",
     component: <Footer />,
@@ -22,6 +22,8 @@ const config: DocsThemeConfig = {
   sidebar: {
     defaultMenuCollapseLevel: 1,
   },
+  primaryHue: 17,
+  primarySaturation: 17,
   useNextSeoProps: () => {
     return {
       titleTemplate: "%s - QvikChat",
