@@ -193,7 +193,6 @@ footer {
     right: 0px;
     top: 0px;
     height: 480px;
-    opacity: 0.6;
     z-index: -5;
     background: linear-gradient(to bottom, #342d2a, transparent);
   }
