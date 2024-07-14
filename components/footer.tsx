@@ -2,7 +2,7 @@ import { Button } from "./ui/button";
 
 export const Footer = () => {
   return (
-    <footer className="w-full p-10 flex flex-row justify-center items-center bg-gray-950/10">
+    <footer className="w-full p-10 flex flex-row justify-center items-center">
       <span>
         QvikChat - A project by{" "}
         <a
