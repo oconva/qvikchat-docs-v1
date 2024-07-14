@@ -50,3 +50,11 @@ defineChatEndpoint({
 You can specify data loading options through the retriever configurations object when called the `getDataRetriever` method or the when specifying the `retrieverConfig` property in the chat endpoint configuration. For more information, check [Retriever Config](/data-retrieval#retriever-config).
 
 ## Loading Custom Data
+
+When you want to load data from a file that is not supported by QvikChat out of the box, you can use any [LangChain-supported data loader](https://js.langchain.com/v0.2/docs/integrations/document_loaders) to load the data and provide the documents as the `docs` property when configuring the retriever. 
+
+### Example - Loading Data from Webpage
+
+Here is an example of how you can load data from a webpage using the `htmlLoader` from LangChain:
+
+```typescript
