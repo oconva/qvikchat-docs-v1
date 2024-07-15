@@ -51,10 +51,56 @@ You can specify data loading options through the retriever configurations object
 
 ## Loading Custom Data
 
-When you want to load data from a file that is not supported by QvikChat out of the box, you can use any [LangChain-supported data loader](https://js.langchain.com/v0.2/docs/integrations/document_loaders) to load the data and provide the documents as the `docs` property when configuring the retriever. 
+When you want to load data from a file that is not supported by QvikChat out of the box, you can use any [LangChain-supported data loader](https://js.langchain.com/v0.2/docs/integrations/document_loaders) to load the data and provide the documents as the `docs` property when configuring the retriever.
 
 ### Example - Loading Data from Webpage
 
-Here is an example of how you can load data from a webpage using the `htmlLoader` from LangChain:
+Below is an example of how you can load data from a webpage.
 
-```typescript
+QvikChat by default doesn't provide a data loader for web pages. So, in this example, we are going to a custom web loader from LangChain to load data from a webpage.
+
+In this example, we're going to use the [Cheerio](https://js.langchain.com/v0.2/docs/integrations/document_loaders/web_loaders/web_cheerio) web loader. Cheerio is a fast and lightweight library that can help you extract data from web pages, without the need for a full browser environment.
+
+```typescript filename="src/index.ts"
+import { setupGenkit, runServer } from "@oconva/qvikchat/genkit";
+import { defineChatEndpoint } from "@oconva/qvikchat/endpoints";
+import { CheerioWebBaseLoader } from "@langchain/community/document_loaders/web/cheerio";
+
+// Setup Genkit
+setupGenkit();
+
+// Method to define all endpoints of the project and run the server
+const defineEndpointsRunServer = async () => {
+  // configure and instantiate data loader
+  const loader = new CheerioWebBaseLoader(
+    "https://qvikchat.pkural.ca/rag-guide"
+  );
+
+  // load data and get docs
+  const docs = await loader.load();
+
+  // define RAG chat endpoint with docs
+  defineChatEndpoint({
+    endpoint: "chat",
+    enableRAG: true,
+    topic: "QvikChat - RAG chat endpoint",
+    retrieverConfig: {
+      docs: docs,
+      dataType: "text",
+      generateEmbeddings: true,
+    },
+  });
+
+  // Run server
+  runServer();
+};
+
+// execute method to define endpoints and run server
+defineEndpointsRunServer();
+```
+
+For the above example, the full source code and the instructions to run it can be found [here](https://github.com/oconva/qvikchat-examples/tree/main/examples/rag-chat-webpage).
+
+**GIGO (Garbage In, Garbage Out):**
+
+For best performance, it is highly recommended that you spend some extra time preparing a strategy for data collection for Retrieval Augmented Generation (RAG). Without proper data cleaning and preprocessing, the data may contain a lot of noise, which can also lead to poor response quality. For example, when crawling data from a webpage, if done without proper planning, the data may contain a lot of irrelevant information such as ads, navigation links, etc. This can lead to poor performance of the chat endpoints. Moreover, data comes in all shapes and sizes. A single webpage or a word document can contain information of various types, like code, text, tables, etc. It is important to handle and process these different types of information using an appropriate strategy.
