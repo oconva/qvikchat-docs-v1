@@ -1,3 +1,5 @@
+import { Notice } from "../../components/notice";
+
 # Chat Endpoint Configurations
 
 You can configure a chat endpoint with various features such as chat history, response caching, and API key authentication, by simply modifying the configurations provided to the `defineChatEndpoint` function. To use this, first import the method as following:
@@ -6,10 +8,14 @@ You can configure a chat endpoint with various features such as chat history, re
 import { defineChatEndpoint } from "@oconva/qvikchat/endpoints";
 ```
 
+## Configurations
+
 Below are some of the chat endpoint configurations you can define.
 
-- `chatAgentConfig`: Configurations for the chat agent, like LLM model, system prompt, chat prompt, and tools.
 - `endpoint`: Server endpoint to which queries should be sent to run this chat flow.
+- `chatAgentConfig`: Configurations for the chat agent, like LLM model, system prompt, chat prompt, and tools. [Read more](#chat-agent-config).
+- `verbose`: If set to `true`, returns additional information in the response. May include usage information (like the number of input and output tokens used, input and output characters, etc.), tools calls information, and request details. By default, it is set to `false`. [Read more](#verbose-mode).
+- `responseType`: Type of response that the endpoint should return. Can be `text`, `json`, or `media`. By default, it is set to `text`. [Read more](#response-type).
 
 **Close-ended Chat Configurations**
 
@@ -37,6 +43,76 @@ Below are some of the chat endpoint configurations you can define.
 - `enableRAG`: Enable RAG (Retrieval Augmented Generation) functionality for this endpoint. Must provide a retriever method if set to true.
 - `retriever`: Method to retrieve documents for RAG. Can be obtained from the `getDataRetriever` method.
 - `retrieverConfig`: Configuration for the RAG retriever, for example, number of documents to retrieve, algorithm to use, etc.
+
+## Verbose Mode
+
+You can set the `verbose` property to `true` to get additional information in the response. This may include usage information (like the number of input and output tokens used, input and output characters, etc.), tools calls information, and request details.
+
+```typescript copy
+defineChatEndpoint({
+  endpoint: "chat",
+  verbose: true,
+});
+```
+
+The output produced by a chat endpoint where verbose is enabled, will contain an additional `details` object. This object may contain the following properties:
+
+```typescript
+type details = {
+  usage: {
+    inputTokens?: number | undefined;
+    outputTokens?: number | undefined;
+    totalTokens?: number | undefined;
+    inputCharacters?: number | undefined;
+    outputCharacters?: number | undefined;
+    inputImages?: number | undefined;
+    outputImages?: number | undefined;
+    inputVideos?: number | undefined;
+    outputVideos?: number | undefined;
+    inputAudioFiles?: number | undefined;
+    outputAudioFiles?: number | undefined;
+    custom?: Record<string, number> | undefined;
+  },
+  tool_requests: {
+    {
+    toolRequest: {
+        name: string;
+        ref?: string | undefined;
+        input?: unknown;
+    };
+    data?: unknown;
+    text?: undefined;
+    media?: undefined;
+    metadata?: Record<string, unknown> | undefined;
+    toolResponse?: undefined;
+    }
+  },
+  request: // Request details, including messages, data, etc.
+}
+```
+
+The details included in the `details` object come directly through [Firebase Genkit](https://github.com/firebase/genkit). The `usage` object contains information about the number of input and output tokens, characters, images, videos, audio files, and any custom data used in the response. The `tool_requests` object contains information about the tools called during the response generation. The `request` object contains the request details, including messages, data, etc.
+
+## Response Type
+
+You can set the `responseType` property to specify the type of response that the endpoint should return. The response type can be `text`, `json`, or `media`. By default, it is set to `text`.
+
+```typescript copy
+defineChatEndpoint({
+  endpoint: "chat",
+  responseType: "json",
+});
+```
+
+<Notice>
+  Please note that, if you are using custom prompts with the endpoint, the
+  output schema of these prompts must match the response type that you configure
+  the endpoint with. Currently, `responseType` is available only in alpha
+  version and is still under testing. Presently, responses are returned only as
+  strings when using the default system and chat prompts. You can still get
+  responses back as media or JSON, but you will need to manually parse the
+  response.
+</Notice>
 
 ## Chat Agent Config
 
