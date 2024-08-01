@@ -1,6 +1,8 @@
-# QvikChat Docs
+# QvikChat v1 Documentation Website
 
-QvikChat Docs is the documentation website for [QvikChat](https://github.com/oconva/qvikchat) framework.
+This repository contains the source code for the [QvikChat](https://github.com/oconva/qvikchat) v1 documentation website.
+
+For the source code related to the documentation website for the latest version of QvikChat, please check the [QvikChat Docs](https://github.com/oconva/qvikchat-docs) repository.
 
 **QvikChat** is a [Firebase Genkit](https://github.com/firebase/genkit) and [LangChain](https://js.langchain.com/v0.2/docs/introduction/) based framework that provides you with a solid foundation to build powerful AI-powered chat service endpoints quickly and efficiently. It includes support for **multiple types of conversations (open-ended, close-ended)**, **chat history**, **response caching**, **authentication**, and **information retrieval using Retrieval Augmented Generation (RAG).**
 
